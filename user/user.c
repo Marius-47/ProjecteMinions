@@ -65,6 +65,46 @@ int usernameExists(char* username) {
     return 0;
 }
 
+//Validar les credencials de l'usuari
+User loginUser(void) {
+    char username[MAX_USERNAME];
+    char password[MAX_PASSWORD];
+    User empty;
+    empty.id = -1;
+
+    clearInputBuffer();
+
+    printf("\nIniciar sessió\n");
+    printf("Nom d'usuari: ");
+    fgets(username, MAX_USERNAME, stdin);
+    trimNewline(username);
+
+    printf("Contrasenya: ");
+    fgets(password, MAX_PASSWORD, stdin);
+    trimNewline(password);
+
+    FILE* f = fopen(USERS_FILE, "rb");
+    if (f == NULL) {
+        printf("Error al obrir el fitxer d'usuaris.\n");
+        return empty;
+    }
+
+    User u;
+    while (fread(&u, sizeof(User), 1, f)) {
+        if (strcmp(u.username, username) == 0 && strcmp(u.password, password) == 0) {
+            fclose(f);
+            printf("Benvingut, %s!\n", u.name);
+            return u;
+        }
+    }
+    fclose(f);
+
+    printf("Contrasenya incorrecta.\n");
+    empty.id = -2; // Se li posa aquest valor per diferenciar i saber que la contrasnya esta malament, llavors s'utilitzara dsp pel PIN
+    strcpy(empty.username, username);
+    return empty;
+}
+
 //Es Registra un nou minion
 int registerMinion(void) {
     User u;
