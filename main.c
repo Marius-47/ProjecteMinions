@@ -25,7 +25,7 @@ void showMenu(User u) {
 
             default:
                 //Aixo son els altres rols que no em toca implementar, em fixo en el meu
-                printf("\nFuncionalitats d'aquest rol no disponibles.\n");
+                printf("\nFunctions are not implemented yet.\n");
                 printf("1. Log out\n");
                 break;
         }

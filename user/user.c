@@ -114,23 +114,23 @@ User loginUser(void) {
 
     loadUsers(users, &total);
 
-    printf("\nIniciar sessio\n");
-    printf("Nom d'usuari: ");
+    printf("\nLog in\n");
+    printf("Username: ");
     fgets(username, MAX_USERNAME, stdin);
     trimNewline(username);
 
-    printf("Contrasenya: ");
+    printf("Password: ");
     fgets(password, MAX_PASSWORD, stdin);
     trimNewline(password);
 
     for (int i = 0; i < total; i++) {
         if (strcmp(users[i].username, username) == 0 && strcmp(users[i].password, password) == 0) {
-            printf("\nBenvingut, %s!\n", users[i].name);
+            printf("\nWelcome %s!\n", users[i].name);
             return users[i];
         }
     }
 
-    printf("Contrasenya incorrecta.\n");
+    printf("Incorrect password.\n");
     empty.id = -2;
     strcpy(empty.username, username);
     return empty;
@@ -147,18 +147,18 @@ User loginWithPin(char* username) {
 
     loadUsers(users, &total);
 
-    printf("Introdueix el PIN: ");
+    printf("Introduce the PIN: ");
     fgets(pin, MAX_PIN, stdin);
     trimNewline(pin);
 
     for (int i = 0; i < total; i++) {
         if (strcmp(users[i].username, username) == 0 && strcmp(users[i].pin, pin) == 0) {
-            printf("\nBenvingut, %s!\n", users[i].name);
+            printf("\nWelcome %s!\n", users[i].name);
             return users[i];
         }
     }
 
-    printf("PIN incorrecte. Acces denegat.\n");
+    printf("Incorrect PIN. Acces denied.\n");
     return empty;
 }
 
@@ -171,27 +171,27 @@ int registerMinion(void) {
     loadUsers(users, &total);
 
     if (total >= MAX_USERS) {
-        printf("No es poden afegir mes usuaris.\n");
+        printf("No more users can be added.\n");
         return 0;
     }
 
-    printf("\nRegistre del nou Minion\n");
+    printf("\nNew Minion Register\n");
 
-    printf("Nom: ");
+    printf("Name: ");
     fgets(u.name, MAX_NAME, stdin);
     trimNewline(u.name);
 
 
-    printf("Nom d'usuari: ");
+    printf("Username: ");
     fgets(u.username, MAX_USERNAME, stdin);
     trimNewline(u.username);
 
     if (usernameExists(u.username)) {
-        printf("Aquest nom d'usuari ja existeix.\n");
+        printf("This name already exist.\n");
         return 0;
     }
 
-    printf("Contrasenya: ");
+    printf("Password: ");
     fgets(u.password, MAX_PASSWORD, stdin);
     trimNewline(u.password);
 
@@ -199,7 +199,7 @@ int registerMinion(void) {
     fgets(u.pin, MAX_PIN, stdin);
     trimNewline(u.pin);
 
-    printf("Fruita preferida: ");
+    printf("Favorite fruit: ");
     fgets(u.favFruit, MAX_FRUIT, stdin);
     trimNewline(u.favFruit);
 
@@ -210,6 +210,6 @@ int registerMinion(void) {
     total++;
 
     saveUsers(users, total);
-    printf("Minion registrat correctament!\n");
+    printf("Minion added successfully!\n");
     return 1;
 }
