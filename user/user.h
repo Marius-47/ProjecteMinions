@@ -33,5 +33,6 @@ void loadHardcodedUsers(void);
 int saveUser(User u);
 void loadHardcodedUsers(void);
 User loginUser(void);
+User loginWithPin(char* username);
 
 #endif

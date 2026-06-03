@@ -105,6 +105,36 @@ User loginUser(void) {
     return empty;
 }
 
+//Aqueesta funcio es per si la contrasenya esta malament i s'ha de validar amb el PIN
+User loginWithPin(char* username) {
+    char pin[MAX_PIN];
+    User empty;
+    empty.id = -1;
+
+    printf("Contrasenya incorrecta. Introdueix el PIN: ");
+    fgets(pin, MAX_PIN, stdin);
+    trimNewline(pin);
+
+    FILE* f = fopen(USERS_FILE, "rb");
+    if (f == NULL) {
+        printf("Error al obrir el fitxer d'usuaris.\n");
+        return empty;
+    }
+
+    User u;
+    while (fread(&u, sizeof(User), 1, f)) {
+        if (strcmp(u.username, username) == 0 && strcmp(u.pin, pin) == 0) {
+            fclose(f);
+            printf("Benvingut, %s!\n", u.name);
+            return u;
+        }
+    }
+    fclose(f);
+
+    printf("PIN incorrecte. Accés denegat.\n");
+    return empty;
+}
+
 //Es Registra un nou minion
 int registerMinion(void) {
     User u;
