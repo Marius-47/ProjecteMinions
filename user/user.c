@@ -3,7 +3,53 @@
 #include "user.h"
 #include "../utils/utils.h"
 
-// Comprova si un username ja existeix al fitxer
+
+//Guarda un usuari al fitxer
+int saveUser(User u) {
+    FILE* f = fopen(USERS_FILE, "ab");
+    if (f == NULL) return 0;
+
+    fwrite(&u, sizeof(User), 1, f);
+    fclose(f);
+    return 1;
+}
+
+//Carrega els usuaris hardcodejats al fitxer si no existeix encara
+void loadHardcodedUsers(void) {
+    if (binFileExists(USERS_FILE)) return;
+
+    User gru;
+    gru.id = 1;
+    strcpy(gru.name, "Gru");
+    strcpy(gru.username, "gru");
+    strcpy(gru.password, "gru123");
+    strcpy(gru.pin, "0000");
+    strcpy(gru.favFruit, "cap");
+    gru.role = GRU;
+    saveUser(gru);
+
+    User minion;
+    minion.id = 2;
+    strcpy(minion.name, "Kevin");
+    strcpy(minion.username, "kevin");
+    strcpy(minion.password, "kevin123");
+    strcpy(minion.pin, "1111");
+    strcpy(minion.favFruit, "banana");
+    minion.role = MINION;
+    saveUser(minion);
+
+    User superminion;
+    superminion.id = 3;
+    strcpy(superminion.name, "Stuart");
+    strcpy(superminion.username, "stuart");
+    strcpy(superminion.password, "stuart123");
+    strcpy(superminion.pin, "2222");
+    strcpy(superminion.favFruit, "poma");
+    superminion.role = SUPERMINION;
+    saveUser(superminion);
+}
+
+//Comprovem si un username ja existeix al fitxer
 int usernameExists(char* username) {
     FILE* f = fopen(USERS_FILE, "rb");
     if (f == NULL) return 0;
@@ -19,7 +65,7 @@ int usernameExists(char* username) {
     return 0;
 }
 
-// Registra un nou minion (llegir i validar dades)
+//Es Registra un nou minion
 int registerMinion(void) {
     User u;
     char username[MAX_USERNAME];
@@ -28,7 +74,7 @@ int registerMinion(void) {
     char name[MAX_NAME];
     char fruit[MAX_FRUIT];
 
-    printf("\nRegistre de nou Minion\n");
+    printf("\nRegistre del nou Minion\n");
     printf("Nom: ");
     fgets(name, MAX_NAME, stdin);
     trimNewline(name);
