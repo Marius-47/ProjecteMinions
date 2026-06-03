@@ -30,5 +30,7 @@ int registerMinion(void);
 int saveUser(User u);
 int usernameExists(char* username);
 void loadHardcodedUsers(void);
+int saveUser(User u);
+void loadHardcodedUsers(void);
 
 #endif
