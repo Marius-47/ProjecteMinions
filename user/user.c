@@ -3,120 +3,213 @@
 #include "user.h"
 #include "../utils/utils.h"
 
+// Carrega tots els usuaris del fitxer a un array
+int loadUsers(User users[], int *total) {
+    FILE* f = fopen(USERS_FILE, "r");
+    if (f == NULL) {
+        *total = 0;
+        return 0;
+    }
 
-//Guarda un usuari al fitxer
-int saveUser(User u) {
-    FILE* f = fopen(USERS_FILE, "ab");
-    if (f == NULL) return 0;
+    fscanf(f, "%d\n", total);
 
-    fwrite(&u, sizeof(User), 1, f);
+    for (int i = 0; i < *total; i++) {
+        fscanf(f, "ID: %d\n", &users[i].id);
+        fscanf(f, "NOM: %s\n", users[i].name);
+        fscanf(f, "USERNAME: %s\n", users[i].username);
+        fscanf(f, "PASSWORD: %s\n", users[i].password);
+        fscanf(f, "PIN: %s\n", users[i].pin);
+        fscanf(f, "FRUITA: %s\n", users[i].favFruit);
+        fscanf(f, "ROL: %d\n", (int*)&users[i].role);
+    }
+
     fclose(f);
     return 1;
 }
 
-//Carrega els usuaris hardcodejats al fitxer si no existeix encara
-void loadHardcodedUsers(void) {
-    if (binFileExists(USERS_FILE)) return;
+//Guarda tots els usuaris de l'array al fitxer de text
+void saveUsers(User users[], int total) {
+    FILE* f = fopen(USERS_FILE, "w");
+    if (f == NULL) {
+        printf("Error al obrir el fitxer d'usuaris.\n");
+        return;
+    }
 
-    User gru;
-    gru.id = 1;
-    strcpy(gru.name, "Gru");
-    strcpy(gru.username, "gru");
-    strcpy(gru.password, "gru123");
-    strcpy(gru.pin, "0000");
-    strcpy(gru.favFruit, "cap");
-    gru.role = GRU;
-    saveUser(gru);
+    fprintf(f, "%d\n", total);
 
-    User minion;
-    minion.id = 2;
-    strcpy(minion.name, "Kevin");
-    strcpy(minion.username, "kevin");
-    strcpy(minion.password, "kevin123");
-    strcpy(minion.pin, "1111");
-    strcpy(minion.favFruit, "banana");
-    minion.role = MINION;
-    saveUser(minion);
+    for (int i = 0; i < total; i++) {
+        fprintf(f, "ID: %d\n", users[i].id);
+        fprintf(f, "NOM: %s\n", users[i].name);
+        fprintf(f, "USERNAME: %s\n", users[i].username);
+        fprintf(f, "PASSWORD: %s\n", users[i].password);
+        fprintf(f, "PIN: %s\n", users[i].pin);
+        fprintf(f, "FRUITA: %s\n", users[i].favFruit);
+        fprintf(f, "ROL: %d\n", users[i].role);
+    }
 
-    User superminion;
-    superminion.id = 3;
-    strcpy(superminion.name, "Stuart");
-    strcpy(superminion.username, "stuart");
-    strcpy(superminion.password, "stuart123");
-    strcpy(superminion.pin, "2222");
-    strcpy(superminion.favFruit, "poma");
-    superminion.role = SUPERMINION;
-    saveUser(superminion);
+    fclose(f);
 }
 
-//Comprovem si un username ja existeix al fitxer
-int usernameExists(char* username) {
-    FILE* f = fopen(USERS_FILE, "rb");
-    if (f == NULL) return 0;
+//Carrega els usuaris hardcodejats al fitxer si no existeix encara, serien els tres primers ID per quan es crea de nou
+void loadHardcodedUsers(void) {
+    if (textfileExists(USERS_FILE)) return;
 
-    User u;
-    while (fread(&u, sizeof(User), 1, f)) {
-        if (strcmp(u.username, username) == 0) {
-            fclose(f);
+    User users[MAX_USERS];
+    int total = 0;
+
+    users[0].id = 1;
+    strcpy(users[0].name, "Gru");
+    strcpy(users[0].username, "gru");
+    strcpy(users[0].password, "gru123");
+    strcpy(users[0].pin, "0000");
+    strcpy(users[0].favFruit, "cap");
+    users[0].role = GRU;
+    total++;
+
+    users[1].id = 2;
+    strcpy(users[1].name, "Kevin");
+    strcpy(users[1].username, "kevin");
+    strcpy(users[1].password, "kevin123");
+    strcpy(users[1].pin, "1111");
+    strcpy(users[1].favFruit, "banana");
+    users[1].role = MINION;
+    total++;
+
+    users[2].id = 3;
+    strcpy(users[2].name, "Stuart");
+    strcpy(users[2].username, "stuart");
+    strcpy(users[2].password, "stuart123");
+    strcpy(users[2].pin, "2222");
+    strcpy(users[2].favFruit, "poma");
+    users[2].role = SUPERMINION;
+    total++;
+
+    saveUsers(users, total);
+}
+
+//Comprova si un username ja existeix
+int usernameExists(char* username) {
+    User users[MAX_USERS];
+    int total = 0;
+
+    loadUsers(users, &total);
+
+    for (int i = 0; i < total; i++) {
+        if (strcmp(users[i].username, username) == 0) {
             return 1;
         }
     }
-    fclose(f);
     return 0;
 }
 
-//Es Registra un nou minion
-int registerMinion(void) {
-    User u;
+//El que fa es validar les credencials de l'usuari
+User loginUser(void) {
     char username[MAX_USERNAME];
     char password[MAX_PASSWORD];
-    char pin[MAX_PIN];
-    char name[MAX_NAME];
-    char fruit[MAX_FRUIT];
+    User empty;
+    empty.id = -1;
 
-    printf("\nRegistre del nou Minion\n");
-    printf("Nom: ");
-    fgets(name, MAX_NAME, stdin);
-    trimNewline(name);
-    strcpy(u.name, name);
+    User users[MAX_USERS];
+    int total = 0;
 
-    clearInputBuffer();
+    loadUsers(users, &total);
 
+    printf("\nIniciar sessio\n");
     printf("Nom d'usuari: ");
     fgets(username, MAX_USERNAME, stdin);
     trimNewline(username);
 
-    if (usernameExists(username)) {
-        printf("Aquest nom d'usuari ja existeix.\n");
-        return 0;
-    }
-    strcpy(u.username, username);
-
     printf("Contrasenya: ");
     fgets(password, MAX_PASSWORD, stdin);
     trimNewline(password);
-    strcpy(u.password, password);
 
-    printf("PIN: ");
+    for (int i = 0; i < total; i++) {
+        if (strcmp(users[i].username, username) == 0 && strcmp(users[i].password, password) == 0) {
+            printf("\nBenvingut, %s!\n", users[i].name);
+            return users[i];
+        }
+    }
+
+    printf("Contrasenya incorrecta.\n");
+    empty.id = -2;
+    strcpy(empty.username, username);
+    return empty;
+}
+
+//Valida el PIN si la contrasenya es incorrecta
+User loginWithPin(char* username) {
+    char pin[MAX_PIN];
+    User empty;
+    empty.id = -1;
+
+    User users[MAX_USERS];
+    int total = 0;
+
+    loadUsers(users, &total);
+
+    printf("Introdueix el PIN: ");
     fgets(pin, MAX_PIN, stdin);
     trimNewline(pin);
-    strcpy(u.pin, pin);
+
+    for (int i = 0; i < total; i++) {
+        if (strcmp(users[i].username, username) == 0 && strcmp(users[i].pin, pin) == 0) {
+            printf("\nBenvingut, %s!\n", users[i].name);
+            return users[i];
+        }
+    }
+
+    printf("PIN incorrecte. Acces denegat.\n");
+    return empty;
+}
+
+//Per registrar un minion nou
+int registerMinion(void) {
+    User users[MAX_USERS];
+    int total = 0;
+    User u;
+
+    loadUsers(users, &total);
+
+    if (total >= MAX_USERS) {
+        printf("No es poden afegir mes usuaris.\n");
+        return 0;
+    }
+
+    printf("\nRegistre del nou Minion\n");
+
+    printf("Nom: ");
+    fgets(u.name, MAX_NAME, stdin);
+    trimNewline(u.name);
+
+
+    printf("Nom d'usuari: ");
+    fgets(u.username, MAX_USERNAME, stdin);
+    trimNewline(u.username);
+
+    if (usernameExists(u.username)) {
+        printf("Aquest nom d'usuari ja existeix.\n");
+        return 0;
+    }
+
+    printf("Contrasenya: ");
+    fgets(u.password, MAX_PASSWORD, stdin);
+    trimNewline(u.password);
+
+    printf("PIN: ");
+    fgets(u.pin, MAX_PIN, stdin);
+    trimNewline(u.pin);
 
     printf("Fruita preferida: ");
-    fgets(fruit, MAX_FRUIT, stdin);
-    trimNewline(fruit);
-    strcpy(u.favFruit, fruit);
+    fgets(u.favFruit, MAX_FRUIT, stdin);
+    trimNewline(u.favFruit);
 
+    u.id = total + 1;
     u.role = MINION;
 
-    FILE* f = fopen(USERS_FILE, "rb");
-    int count = 0;
-    if (f != NULL) {
-        User tmp;
-        while (fread(&tmp, sizeof(User), 1, f)) count++;
-        fclose(f);
-    }
-    u.id = count + 1;
+    users[total] = u;
+    total++;
 
-    return saveUser(u);
+    saveUsers(users, total);
+    printf("Minion registrat correctament!\n");
+    return 1;
 }

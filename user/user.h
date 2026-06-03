@@ -6,7 +6,9 @@
 #define MAX_NAME 100
 #define MAX_FRUIT 50
 #define MAX_PIN 10
-#define USERS_FILE "data/users.bin"
+#define USERS_FILE "data/users.txt"
+#define MAX_USERS 100
+
 
 typedef enum {
     GRU,
@@ -26,11 +28,12 @@ typedef struct {
 } User;
 
 // Funcions de registre
-int registerMinion(void);
-int saveUser(User u);
+int loadUsers(User users[], int *total);
+void saveUsers(User users[], int total);
+void loadHardcodedUsers(void);
 int usernameExists(char* username);
-void loadHardcodedUsers(void);
-int saveUser(User u);
-void loadHardcodedUsers(void);
+User loginUser(void);
+User loginWithPin(char* username);
+int registerMinion(void);
 
 #endif
