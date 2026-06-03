@@ -18,7 +18,7 @@ void showMenu(User u) {
 
         switch (u.role) {
             case GRU:
-                printf("1. Consultar estat de produccio\n");
+                printf("\n1. Consultar estat de produccio\n");
                 printf("2. Log out\n");
                 //Aqui es on posare les funcionalitats futures
                 break;
