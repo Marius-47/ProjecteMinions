@@ -80,6 +80,8 @@ int registerMinion(void) {
     trimNewline(name);
     strcpy(u.name, name);
 
+    clearInputBuffer();
+
     printf("Nom d'usuari: ");
     fgets(username, MAX_USERNAME, stdin);
     trimNewline(username);

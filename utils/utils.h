@@ -130,4 +130,4 @@ int getFileSize(char* filename);
 *************************************************/
 void clearInputBuffer();
 
-#endif UTILS_H
+#endif // UTILS_H
