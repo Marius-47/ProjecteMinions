@@ -100,7 +100,7 @@ User loginUser(void) {
     fclose(f);
 
     printf("Contrasenya incorrecta.\n");
-    empty.id = -2; // -2 indica contrasenya incorrecta, cal demanar PIN
+    empty.id = -2; // Se li posa aquest valor per diferenciar i saber que la contrasnya esta malament, llavors s'utilitzara dsp pel PIN
     strcpy(empty.username, username);
     return empty;
 }
