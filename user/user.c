@@ -15,12 +15,12 @@ int loadUsers(User users[], int *total) {
 
     for (int i = 0; i < *total; i++) {
         fscanf(f, "ID: %d\n", &users[i].id);
-        fscanf(f, "NOM: %s\n", users[i].name);
+        fscanf(f, "NAME: %s\n", users[i].name);
         fscanf(f, "USERNAME: %s\n", users[i].username);
         fscanf(f, "PASSWORD: %s\n", users[i].password);
         fscanf(f, "PIN: %s\n", users[i].pin);
-        fscanf(f, "FRUITA: %s\n", users[i].favFruit);
-        fscanf(f, "ROL: %d\n", (int*)&users[i].role);
+        fscanf(f, "FRUIT: %s\n", users[i].favFruit);
+        fscanf(f, "ROLE: %d\n", (int*)&users[i].role);
     }
 
     fclose(f);
@@ -39,12 +39,12 @@ void saveUsers(User users[], int total) {
 
     for (int i = 0; i < total; i++) {
         fprintf(f, "ID: %d\n", users[i].id);
-        fprintf(f, "NOM: %s\n", users[i].name);
+        fprintf(f, "NAME: %s\n", users[i].name);
         fprintf(f, "USERNAME: %s\n", users[i].username);
         fprintf(f, "PASSWORD: %s\n", users[i].password);
         fprintf(f, "PIN: %s\n", users[i].pin);
-        fprintf(f, "FRUITA: %s\n", users[i].favFruit);
-        fprintf(f, "ROL: %d\n", users[i].role);
+        fprintf(f, "FRUIT: %s\n", users[i].favFruit);
+        fprintf(f, "ROLE: %d\n", users[i].role);
     }
 
     fclose(f);
@@ -67,9 +67,9 @@ void loadHardcodedUsers(void) {
     total++;
 
     users[1].id = 2;
-    strcpy(users[1].name, "Kevin");
-    strcpy(users[1].username, "kevin");
-    strcpy(users[1].password, "kevin123");
+    strcpy(users[1].name, "Bob");
+    strcpy(users[1].username, "bob");
+    strcpy(users[1].password, "bob123");
     strcpy(users[1].pin, "1111");
     strcpy(users[1].favFruit, "banana");
     users[1].role = MINION;
