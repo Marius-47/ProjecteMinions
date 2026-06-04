@@ -2,13 +2,15 @@
 #include "user/user.h"
 #include "utils/utils.h"
 #include "tool/tool.h"
+#include "task/task.h"
 
 void showGruMenu(User u, int *loggedIn) {
     char option;
 
     printf("\n1. List tools\n");
     printf("2. List tasks\n");
-    printf("3. Log out\n");
+    printf("3. Create part task\n");
+    printf("4. Log out\n");
 
     printf("Choose an option: ");
     scanf(" %c", &option);
@@ -22,6 +24,9 @@ void showGruMenu(User u, int *loggedIn) {
             //listTasks
             break;
         case '3':
+            createPartTask();
+            break;
+        case '4':
             printf("Logging out...\n");
             *loggedIn = 0;
             break;
@@ -67,7 +72,7 @@ void showMenu(User u) {
             case GRU: printf("Gru"); break;
             case MINION: printf("Minion"); break;
             case SUPERMINION: printf("Superminion"); break;
-            case MINION_ENGINEER: printf("Minion Enginyer"); break;
+            case MINION_ENGINEER: printf("Minion Enginyer"); break;     
         }
         printf(")\n");
 

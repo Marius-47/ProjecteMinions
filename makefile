@@ -12,8 +12,11 @@ obj/utils.o: utils/utils.c utils/utils.h
 obj/tool.o: tool/tool.c tool/tool.h
 	gcc -g -c tool/tool.c -o obj/tool.o
 
-minions: obj/main.o obj/user.o obj/tool.o obj/utils.o
-	gcc -g obj/main.o obj/user.o obj/tool.o obj/utils.o -o minions
+obj/task.o: task/task.c task/task.h
+	gcc -g -c task/task.c -o obj/task.o
+
+minions: obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o
+	gcc -g obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o -o minions
 
 clean:
 	rm -f obj/*.o minions
