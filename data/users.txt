@@ -7,9 +7,9 @@ PIN: 0000
 FRUIT: cap
 ROLE: 0
 ID: 2
-NAME: Kevin
-USERNAME: kevin
-PASSWORD: kevin123
+NAME: Bob
+USERNAME: bob
+PASSWORD: bob123
 PIN: 1111
 FRUIT: banana
 ROLE: 1
@@ -21,9 +21,9 @@ PIN: 2222
 FRUIT: poma
 ROLE: 2
 ID: 4
-NAME: Bobi
-USERNAME: bobi
-PASSWORD: bobi99
+NAME: Puyi
+USERNAME: puyi
+PASSWORD: puyi123
 PIN: 9090
 FRUIT: mango
 ROLE: 1

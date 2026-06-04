@@ -19,7 +19,34 @@ void showGruMenu(User u, int *loggedIn) {
             listTools();
             break;
         case '2':
-            printf("Coming soon!\n");
+            //listTasks
+            break;
+        case '3':
+            printf("Logging out...\n");
+            *loggedIn = 0;
+            break;
+        default:
+            printf("Invalid option.\n");
+            break;
+    }
+}
+
+void showCommonMenu(User u, int *loggedIn) {
+    char option;
+
+    printf("\n1. List tools\n");
+    printf("2. List tasks\n");
+    printf("3. Log out\n");
+    printf("Choose an option: ");
+    scanf(" %c", &option);
+    clearInputBuffer();
+
+    switch (option) {
+        case '1':
+            listTools();
+            break;
+        case '2':
+            //listTasks
             break;
         case '3':
             printf("Logging out...\n");
@@ -32,11 +59,10 @@ void showGruMenu(User u, int *loggedIn) {
 }
 
 void showMenu(User u) {
-    char option;
     int loggedIn = 1;
 
     while (loggedIn) {
-        printf("Logged in as: %s (", u.name);
+        printf("\nLogged in as: %s (", u.name);
         switch (u.role) {
             case GRU: printf("Gru"); break;
             case MINION: printf("Minion"); break;
@@ -45,24 +71,10 @@ void showMenu(User u) {
         }
         printf(")\n");
 
-        switch (u.role) {
-            case GRU:
-                showGruMenu(u, &loggedIn);
-                break;
-
-            default:
-                printf("\nFunctions are not implemented yet.\n");
-                printf("1. Log out\n");
-                
-                printf("Choose an option: ");
-                scanf(" %c", &option);
-                clearInputBuffer();
-
-                if (option == '1') {
-                    printf("Logging out...\n");
-                    loggedIn = 0;
-                }
-                break;
+        if (u.role == GRU) {
+            showGruMenu(u, &loggedIn);
+        } else {
+            showCommonMenu(u, &loggedIn);
         }
     }
 }
