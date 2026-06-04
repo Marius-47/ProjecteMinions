@@ -1,0 +1,19 @@
+2
+ID: 1
+NAME: Fart-Gun
+TYPE: Weapon
+DESC: Shoots-fart-gas-at-enemies
+QUANTITY: 2
+IN_PRODUCTION: 1
+NUM_PIECES: 2
+PIECE: Gas-Tank
+PIECE: Nozzle
+ID: 2
+NAME: Shrink-Ray
+TYPE: Weapon
+DESC: Shrinks-any-object-or-person
+QUANTITY: 1
+IN_PRODUCTION: 0
+NUM_PIECES: 2
+PIECE: Lens
+PIECE: Power-Cell

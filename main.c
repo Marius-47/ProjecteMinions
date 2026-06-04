@@ -1,6 +1,35 @@
 #include <stdio.h>
 #include "user/user.h"
 #include "utils/utils.h"
+#include "tool/tool.h"
+
+void showGruMenu(User u, int *loggedIn) {
+    char option;
+
+    printf("\n1. List tools\n");
+    printf("2. List tasks\n");
+    printf("3. Log out\n");
+
+    printf("Choose an option: ");
+    scanf(" %c", &option);
+    clearInputBuffer();
+
+    switch (option) {
+        case '1':
+            listTools();
+            break;
+        case '2':
+            printf("Coming soon!\n");
+            break;
+        case '3':
+            printf("Logging out...\n");
+            *loggedIn = 0;
+            break;
+        default:
+            printf("Invalid option.\n");
+            break;
+    }
+}
 
 void showMenu(User u) {
     char option;
@@ -18,24 +47,22 @@ void showMenu(User u) {
 
         switch (u.role) {
             case GRU:
-                printf("1. Consultar estat de produccio\n");
-                printf("2. Log out\n");
-                //Aqui es on posare les funcionalitats futures
+                showGruMenu(u, &loggedIn);
                 break;
 
             default:
-                //Aixo son els altres rols que no em toca implementar, em fixo en el meu
                 printf("\nFunctions are not implemented yet.\n");
                 printf("1. Log out\n");
+                
+                printf("Choose an option: ");
+                scanf(" %c", &option);
+                clearInputBuffer();
+
+                if (option == '1') {
+                    printf("Logging out...\n");
+                    loggedIn = 0;
+                }
                 break;
-        }
-
-        printf("Choose an option: ");
-        scanf(" %c", &option);
-
-        if (option == '2' || (u.role != GRU && option == '1')) {
-            printf("Logging out...\n");
-            loggedIn = 0;
         }
     }
 }
@@ -44,6 +71,7 @@ int main() {
     char option;
 
     loadHardcodedUsers();
+    loadHardcodedTools();
 
     do {
         printf("\nWelcome to LS Minions Club :) What would you like to do today?\n");
