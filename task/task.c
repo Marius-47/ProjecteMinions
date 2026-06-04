@@ -4,9 +4,29 @@
 #include "../user/user.h"
 #include "../utils/utils.h"
 
+//Per saber l'estat de la tasca tenim aquesta funcio auxiliar que anirem cridant a loadTasks
+// Per saber l'estat de la tasca tenim aquesta funcio auxiliar
+// que anirem cridant a loadTasks
+void updateTaskStatus(Task *t) {
+    DateTime now = getCurrentDateTime();
+
+    int diffToStart = calculateDifferenceInSeconds(now, t->startTime);
+    int diffToEnd = diffToStart + t->durationMinutes * 60;
+
+    if (diffToStart > 0) {
+        t->status = PENDING;
+    } else if (diffToEnd > 0) {
+        t->status = IN_PROGRESS;
+    } else {
+        t->status = COMPLETED;
+    }
+}
+
 // Carrega totes les tasques del fitxer
 int loadTasks(Task tasks[], int *total) {
     FILE* f = fopen(TASKS_FILE, "r");
+    int i;
+    
     if (f == NULL) {
         *total = 0;
         return 0;
@@ -14,7 +34,7 @@ int loadTasks(Task tasks[], int *total) {
 
     fscanf(f, "%d\n", total);
 
-    for (int i = 0; i < *total; i++) {
+    for (i = 0; i < *total; i++) {
         fscanf(f, "ID: %d\n", &tasks[i].id);
         fscanf(f, "DESC: %s\n", tasks[i].description);
         fscanf(f, "USERNAME: %s\n", tasks[i].assignedUsername);
@@ -28,6 +48,7 @@ int loadTasks(Task tasks[], int *total) {
         fscanf(f, "DURATION: %d\n", &tasks[i].durationMinutes);
         fscanf(f, "TYPE: %d\n", (int*)&tasks[i].type);
         fscanf(f, "STATUS: %d\n", (int*)&tasks[i].status);
+        updateTaskStatus(&tasks[i]);
     }
 
     fclose(f);
@@ -37,6 +58,8 @@ int loadTasks(Task tasks[], int *total) {
 //Guarda totes les tasques al fitxer
 void saveTasks(Task tasks[], int total) {
     FILE* f = fopen(TASKS_FILE, "w");
+    int i;
+    
     if (f == NULL) {
         printf("Error opening tasks file.\n");
         return;
@@ -44,7 +67,7 @@ void saveTasks(Task tasks[], int total) {
 
     fprintf(f, "%d\n", total);
 
-    for (int i = 0; i < total; i++) {
+    for (i = 0; i < total; i++) {
         fprintf(f, "ID: %d\n", tasks[i].id);
         fprintf(f, "DESC: %s\n", tasks[i].description);
         fprintf(f, "USERNAME: %s\n", tasks[i].assignedUsername);
@@ -87,6 +110,7 @@ int hasOverlap(Task tasks[], int total, char* username, DateTime start, int dura
 void createPartTask(void) {
     Task tasks[MAX_TASKS];
     int total = 0;
+    int i;
     Task t;
 
     loadTasks(tasks, &total);
@@ -96,12 +120,12 @@ void createPartTask(void) {
     int totalUsers = 0;
     loadUsers(users, &totalUsers);
 
-    // Mostrem llista de minions disponibles
-    printf("\n--- Available Minions ---\n");
     int minionCount = 0;
     int minionIndexes[MAX_USERS];
 
-    for (int i = 0; i < totalUsers; i++) {
+    // Mostrem llista de minions disponibles
+    printf("\n--- Available Minions ---\n");
+    for (i = 0; i < totalUsers; i++) {
         if (users[i].role == MINION) {
             minionCount++;
             minionIndexes[minionCount - 1] = i;
@@ -133,16 +157,24 @@ void createPartTask(void) {
     fgets(t.description, MAX_TASK_DESC, stdin);
     trimNewline(t.description);
 
-    printf("Start date (YYYY-MM-DD HH:MM): ");
     char dateStr[20];
+    int parsedValues;
+
+    printf("Start date (YYYY-MM-DD HH:MM): ");
     fgets(dateStr, 20, stdin);
     trimNewline(dateStr);
-    sscanf(dateStr, "%d-%d-%d %d:%d",
+
+    parsedValues = sscanf(dateStr, "%d-%d-%d %d:%d",
         &t.startTime.year,
         &t.startTime.month,
         &t.startTime.day,
         &t.startTime.hour,
         &t.startTime.minute);
+
+    if (parsedValues != 5 || !validateDateTime(t.startTime)) {
+        printf("Error: Invalid date.\n");
+        return;
+    }
 
     printf("Duration (minutes): ");
     scanf("%d", &t.durationMinutes);
@@ -156,10 +188,12 @@ void createPartTask(void) {
 
     t.id = total + 1;
     t.type = PART_CREATION;
-    t.status = PENDING;
+
+    updateTaskStatus(&t);
 
     tasks[total] = t;
     total++;
 
+    saveTasks(tasks, total);
     printf("Task created successfully!\n");
 }

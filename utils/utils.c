@@ -148,7 +148,7 @@ DateTime* stringToDateTime(char* dateTimeStr) {
 ************************************************/
 int validateDateTime(DateTime dt) {
     if (dt.year < 1970 ||
-        dt.month < 1 || dt.month > 13 ||
+        dt.month < 1 || dt.month > 12 ||
         dt.day < 1 || dt.day > 31 ||
         dt.hour < 0 || dt.hour > 23 ||
         dt.minute < 0 || dt.minute > 59) {
