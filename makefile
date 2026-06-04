@@ -9,8 +9,11 @@ obj/user.o: user/user.c user/user.h
 obj/utils.o: utils/utils.c utils/utils.h
 	gcc -g -c utils/utils.c -o obj/utils.o
 
-minions: obj/main.o obj/user.o obj/utils.o
-	gcc -g obj/main.o obj/user.o obj/utils.o -o minions
+obj/tool.o: tool/tool.c tool/tool.h
+	gcc -g -c tool/tool.c -o obj/tool.o
+
+minions: obj/main.o obj/user.o obj/tool.o obj/utils.o
+	gcc -g obj/main.o obj/user.o obj/tool.o obj/utils.o -o minions
 
 clean:
 	rm -f obj/*.o minions
