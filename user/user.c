@@ -67,9 +67,9 @@ void loadHardcodedUsers(void) {
     total++;
 
     users[1].id = 2;
-    strcpy(users[1].name, "Kevin");
-    strcpy(users[1].username, "kevin");
-    strcpy(users[1].password, "kevin123");
+    strcpy(users[1].name, "Bob");
+    strcpy(users[1].username, "bob");
+    strcpy(users[1].password, "bob123");
     strcpy(users[1].pin, "1111");
     strcpy(users[1].favFruit, "banana");
     users[1].role = MINION;

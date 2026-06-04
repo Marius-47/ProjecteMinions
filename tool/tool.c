@@ -100,10 +100,9 @@ void listTools(void) {
         return;
     }
 
-    printf("\nTool List\n");
+    printf("\n--TOOL LIST--\n");
     for (int i = 0; i < total; i++) {
-        printf("\nID: %d\n", tools[i].id);
-        printf("Name: %s\n", tools[i].name);
+        printf("\nName: %s\n", tools[i].name);
         printf("Type: %s\n", tools[i].type);
         printf("Description: %s\n", tools[i].description);
         printf("Current quantity: %d\n", tools[i].currentQuantity);
@@ -115,4 +114,5 @@ void listTools(void) {
         }
         printf("\n");
     }
+    printf("\n");
 }
