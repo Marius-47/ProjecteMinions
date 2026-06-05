@@ -5,7 +5,7 @@
 #define MAX_PASSWORD 50
 #define MAX_NAME 100
 #define MAX_FRUIT 50
-#define MAX_PIN 10
+#define MAX_PIN 20
 #define USERS_FILE "data/users.txt"
 #define MAX_USERS 100
 

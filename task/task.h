@@ -4,7 +4,7 @@
 #include "../utils/utils.h"
 
 #define MAX_TASK_DESC 200
-#define MAX_TASKS 100
+#define MAX_TASKS 200
 #define TASKS_FILE "data/tasks.txt"
 
 typedef enum {
@@ -34,5 +34,7 @@ void saveTasks(Task tasks[], int total);
 int hasOverlap(Task tasks[], int total, char* username, DateTime start, int duration);
 void createPartTask(void);
 void updateTaskStatus(Task *t);
+void createToolAssemblyTask();
+int collectToolAssemblyTaskData(Task *t, Task tasks[], int total);
 
 #endif

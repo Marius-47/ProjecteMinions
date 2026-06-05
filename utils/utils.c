@@ -33,7 +33,6 @@ DateTime getCurrentDateTime() {
 * Returns: A negative value if dt1 is earlier than dt2, a positive value if dt1 is later than dt2, and 0 if they are equal
 ********************************************************/
 int compareDateTimes(DateTime dt1, DateTime dt2) {
-    return dt1.minute - dt2.minute;
 
     if (dt1.year != dt2.year) {
         return dt1.year - dt2.year;
@@ -47,6 +46,9 @@ int compareDateTimes(DateTime dt1, DateTime dt2) {
     if (dt1.hour != dt2.hour) {
         return dt1.hour - dt2.hour; 
     }
+
+    return dt1.minute - dt2.minute;
+    
 }
 
 /********************************************************
