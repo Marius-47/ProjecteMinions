@@ -117,6 +117,11 @@ void createPartTask(void) {
 
     loadTasks(tasks, &total);
 
+    if (total >= MAX_TASKS) {
+    printf("Error: Maximum number of tasks reached.\n");
+    return;
+}
+
     //Aqui posem els usuaris per aixi poder fer selecció del minion en concret
     User users[MAX_USERS];
     int totalUsers = 0;
@@ -126,7 +131,7 @@ void createPartTask(void) {
     int minionIndexes[MAX_USERS];
 
     // Mostrem llista de minions disponibles
-    printf("\n--- Available Minions ---\n");
+    printf("\n--Available Minions--\n");
     for (i = 0; i < totalUsers; i++) {
         if (users[i].role == MINION) {
             minionCount++;
@@ -155,7 +160,7 @@ void createPartTask(void) {
     strcpy(t.assignedName, users[minionIndex].name);
 
     // Demanem dades de la tasca
-    printf("Description: ");
+    printf("\nDescription: ");
     fgets(t.description, MAX_TASK_DESC, stdin);
     trimNewline(t.description);
 
@@ -249,7 +254,7 @@ int collectToolAssemblyTaskData(Task *t, Task tasks[], int total) {
     strcpy(t->assignedName, users[superminionIndex].name);
 
     // Demanem les dades de la tasca
-    printf("Description: ");
+    printf("\nDescription: ");
     fgets(t->description, MAX_TASK_DESC, stdin);
     trimNewline(t->description);
 
@@ -295,21 +300,22 @@ void createToolAssemblyTask(void) {
 
     loadTasks(tasks, &total);
 
+    if (total >= MAX_TASKS) {
+        printf("Error: Maximum number of tasks reached.\n");
+        return;
+    }
+
     if (collectToolAssemblyTaskData(&t, tasks, total)) {
+        t.id = total + 1;
         t.type = TOOL_ASSEMBLY;
+
         updateTaskStatus(&t);
-        
-        printf("\nTool assembly task data collected successfully!\n");
-        printf("Superminion: %s (%s)\n", t.assignedName, t.assignedUsername);
-        printf("Description: %s\n", t.description);
-        printf("Start date: %d-%d-%d %d:%d\n",
-            t.startTime.year,
-            t.startTime.month,
-            t.startTime.day,
-            t.startTime.hour,
-            t.startTime.minute);
-        printf("Duration: %d minutes\n", t.durationMinutes);
-        printf("Type: %d\n", t.type);
-        printf("Status: %d\n", t.status);
+
+        tasks[total] = t;
+        total++;
+
+        saveTasks(tasks, total);
+
+        printf("Tool assembly task created successfully!\n");
     }
 }
