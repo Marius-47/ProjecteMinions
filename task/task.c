@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "task.h"
 #include "../user/user.h"
 #include "../utils/utils.h"
@@ -335,12 +336,16 @@ void listTasks(void) {
                 tasks[i].assignedName,
                 tasks[i].assignedUsername);
             printf("Description: %s\n", tasks[i].description);
-            printf("Start date: %d-%02d-%02d %02d:%02d\n",
-                tasks[i].startTime.year,
-                tasks[i].startTime.month,
-                tasks[i].startTime.day,
-                tasks[i].startTime.hour,
-                tasks[i].startTime.minute);
+
+            char *startTimeStr = dateTimeToString(tasks[i].startTime);
+
+            if (startTimeStr == NULL) {
+                printf("Error converting start date.\n");
+            } else {
+                printf("Start date: %s\n", startTimeStr);
+                free(startTimeStr);
+            }
+
             printf("Duration: %d minutes\n", tasks[i].durationMinutes);
 
             if (tasks[i].type == PART_CREATION) {
