@@ -122,8 +122,6 @@ char* dateTimeToString(DateTime dt) {
     }
 
     snprintf(buffer, 20, "%04d-%02d-%02d %02d:%02d", dt.year, dt.month, dt.day, dt.hour, dt.minute);
-    free(buffer);
-    buffer = NULL;
     return buffer;
 }
 
