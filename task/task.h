@@ -4,7 +4,7 @@
 #include "../utils/utils.h"
 
 #define MAX_TASK_DESC 200
-#define MAX_TASKS 100
+#define MAX_TASKS 200
 #define TASKS_FILE "data/tasks.txt"
 
 typedef enum {
