@@ -319,3 +319,47 @@ void createToolAssemblyTask(void) {
         printf("Tool assembly task created successfully!\n");
     }
 }
+
+//Funcio que mostra les tasques que estan pendent i en curs
+void listTasks(void) {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+    int tasksShown = 0;
+
+    loadTasks(tasks, &total);
+
+    printf("\n--Pending and In Progress Tasks--\n");
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == PENDING || tasks[i].status == IN_PROGRESS) {
+            printf("\nAssigned to: %s (%s)\n",
+                tasks[i].assignedName,
+                tasks[i].assignedUsername);
+            printf("Description: %s\n", tasks[i].description);
+            printf("Start date: %d-%02d-%02d %02d:%02d\n",
+                tasks[i].startTime.year,
+                tasks[i].startTime.month,
+                tasks[i].startTime.day,
+                tasks[i].startTime.hour,
+                tasks[i].startTime.minute);
+            printf("Duration: %d minutes\n", tasks[i].durationMinutes);
+
+            if (tasks[i].type == PART_CREATION) {
+                printf("Type: Part creation\n");
+            } else if (tasks[i].type == TOOL_ASSEMBLY) {
+                printf("Type: Tool assembly\n");
+            }
+
+            if (tasks[i].status == PENDING) {
+                printf("Status: Pending\n");
+            } else {
+                printf("Status: In progress\n");
+            }
+
+            tasksShown++;
+        }
+    }
+
+    if (tasksShown == 0) {
+        printf("No pending or in progress tasks found.\n");
+    }
+}
