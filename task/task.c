@@ -36,7 +36,9 @@ int loadTasks(Task tasks[], int *total) {
 
     for (i = 0; i < *total; i++) {
         fscanf(f, "ID: %d\n", &tasks[i].id);
-        fscanf(f, "DESC: %s\n", tasks[i].description);
+        fscanf(f, "DESC: ");
+        fgets(tasks[i].description, MAX_TASK_DESC, f);
+        trimNewline(tasks[i].description);
         fscanf(f, "USERNAME: %s\n", tasks[i].assignedUsername);
         fscanf(f, "NAME: %s\n", tasks[i].assignedName);
         fscanf(f, "START: %d-%d-%d %d:%d\n",
@@ -196,4 +198,118 @@ void createPartTask(void) {
 
     saveTasks(tasks, total);
     printf("Task created successfully!\n");
+}
+
+// Recull les dades d'una tasca d'ensellament i permet seleccionar un superminion
+int collectToolAssemblyTaskData(Task *t, Task tasks[], int total) {
+    User users[MAX_USERS];
+    int totalUsers = 0;
+    int superminionCount = 0;
+    int superminionIndexes[MAX_USERS];
+    int choice;
+    int superminionIndex;
+    int parsedValues;
+    int i;
+    char dateStr[20];
+
+    loadUsers(users, &totalUsers);
+
+    // Mostrem només els superminions disponibles
+    printf("\n--Available Superminions--\n");
+
+    for (i = 0; i < totalUsers; i++) {
+        if (users[i].role == SUPERMINION) {
+            superminionIndexes[superminionCount] = i;
+            superminionCount++;
+
+            printf("%d. %s (%s)\n",
+                superminionCount,
+                users[i].name,
+                users[i].username);
+        }
+    }
+
+    if (superminionCount == 0) {
+        printf("No superminions available.\n");
+        return 0;
+    }
+
+    printf("Select superminion number: ");
+    scanf("%d", &choice);
+    clearInputBuffer();
+
+    if (choice < 1 || choice > superminionCount) {
+        printf("Invalid selection.\n");
+        return 0;
+    }
+
+    superminionIndex = superminionIndexes[choice - 1];
+
+    strcpy(t->assignedUsername, users[superminionIndex].username);
+    strcpy(t->assignedName, users[superminionIndex].name);
+
+    // Demanem les dades de la tasca
+    printf("Description: ");
+    fgets(t->description, MAX_TASK_DESC, stdin);
+    trimNewline(t->description);
+
+    printf("Start date (YYYY-MM-DD HH:MM): ");
+    fgets(dateStr, 20, stdin);
+    trimNewline(dateStr);
+
+    parsedValues = sscanf(dateStr, "%d-%d-%d %d:%d",
+        &t->startTime.year,
+        &t->startTime.month,
+        &t->startTime.day,
+        &t->startTime.hour,
+        &t->startTime.minute);
+
+    if (parsedValues != 5 || !validateDateTime(t->startTime)) {
+        printf("Error: Invalid date.\n");
+        return 0;
+    }
+
+    printf("Duration (minutes): ");
+    scanf("%d", &t->durationMinutes);
+    clearInputBuffer();
+
+    if (t->durationMinutes <= 0) {
+        printf("Error: Duration must be greater than zero.\n");
+        return 0;
+    }
+
+    if (hasOverlap(tasks, total, t->assignedUsername,
+            t->startTime, t->durationMinutes)) {
+        printf("Error: This superminion already has a task at that time.\n");
+        return 0;
+    }
+
+    return 1;
+}
+
+//Com que per guardar a fitxer tenim una TT, ara utilitzem una funcio auxiliar molt facil nomes per printar per pantalla el que s'introdueix, per comprovar q es guarden be els valors
+void createToolAssemblyTask(void) {
+    Task tasks[MAX_TASKS];
+    Task t;
+    int total = 0;
+
+    loadTasks(tasks, &total);
+
+    if (collectToolAssemblyTaskData(&t, tasks, total)) {
+        t.type = TOOL_ASSEMBLY;
+        updateTaskStatus(&t);
+        
+        printf("\nTool assembly task data collected successfully!\n");
+        printf("Superminion: %s (%s)\n", t.assignedName, t.assignedUsername);
+        printf("Description: %s\n", t.description);
+        printf("Start date: %d-%d-%d %d:%d\n",
+            t.startTime.year,
+            t.startTime.month,
+            t.startTime.day,
+            t.startTime.hour,
+            t.startTime.minute);
+        printf("Duration: %d minutes\n", t.durationMinutes);
+        printf("Type: %d\n", t.type);
+        printf("Status: %d\n", t.status);
+    }
 }

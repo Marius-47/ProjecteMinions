@@ -34,5 +34,7 @@ void saveTasks(Task tasks[], int total);
 int hasOverlap(Task tasks[], int total, char* username, DateTime start, int duration);
 void createPartTask(void);
 void updateTaskStatus(Task *t);
+void createToolAssemblyTask();
+int collectToolAssemblyTaskData(Task *t, Task tasks[], int total);
 
 #endif
