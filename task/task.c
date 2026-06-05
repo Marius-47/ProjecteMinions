@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "task.h"
 #include "../user/user.h"
 #include "../utils/utils.h"
@@ -317,5 +318,53 @@ void createToolAssemblyTask(void) {
         saveTasks(tasks, total);
 
         printf("Tool assembly task created successfully!\n");
+    }
+}
+
+//Funcio que mostra les tasques que estan pendent i en curs
+void listTasks(void) {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+    int tasksShown = 0;
+
+    loadTasks(tasks, &total);
+
+    printf("\n--Pending and In Progress Tasks--\n");
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == PENDING || tasks[i].status == IN_PROGRESS) {
+            printf("\nAssigned to: %s (%s)\n",
+                tasks[i].assignedName,
+                tasks[i].assignedUsername);
+            printf("Description: %s\n", tasks[i].description);
+
+            char *startTimeStr = dateTimeToString(tasks[i].startTime);
+
+            if (startTimeStr == NULL) {
+                printf("Error converting start date.\n");
+            } else {
+                printf("Start date: %s\n", startTimeStr);
+                free(startTimeStr);
+            }
+
+            printf("Duration: %d minutes\n", tasks[i].durationMinutes);
+
+            if (tasks[i].type == PART_CREATION) {
+                printf("Type: Part creation\n");
+            } else if (tasks[i].type == TOOL_ASSEMBLY) {
+                printf("Type: Tool assembly\n");
+            }
+
+            if (tasks[i].status == PENDING) {
+                printf("Status: Pending\n");
+            } else {
+                printf("Status: In progress\n");
+            }
+
+            tasksShown++;
+        }
+    }
+
+    if (tasksShown == 0) {
+        printf("No pending or in progress tasks found.\n");
     }
 }

@@ -22,7 +22,7 @@ void showGruMenu(User u, int *loggedIn) {
             listTools();
             break;
         case '2':
-            //listTasks
+            listTasks();
             break;
         case '3':
             createPartTask();
@@ -55,7 +55,7 @@ void showCommonMenu(User u, int *loggedIn) {
             listTools();
             break;
         case '2':
-            //listTasks
+            listTasks();
             break;
         case '3':
             printf("Logging out...\n");
