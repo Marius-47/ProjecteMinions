@@ -348,18 +348,6 @@ void listTasks(void) {
 
             printf("Duration: %d minutes\n", tasks[i].durationMinutes);
 
-            if (tasks[i].type == PART_CREATION) {
-                printf("Type: Part creation\n");
-            } else if (tasks[i].type == TOOL_ASSEMBLY) {
-                printf("Type: Tool assembly\n");
-            }
-
-            if (tasks[i].status == PENDING) {
-                printf("Status: Pending\n");
-            } else {
-                printf("Status: In progress\n");
-            }
-
             tasksShown++;
         }
     }
