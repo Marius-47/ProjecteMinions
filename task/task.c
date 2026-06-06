@@ -383,7 +383,7 @@ void printProductionTask(Task task) {
     }
 }
 
-// Mostra les tasques pendents
+//Funcio per tasques pendents
 static void showPendingTasks(Task tasks[], int total) {
     int pendingTasksShown = 0;
 
@@ -396,13 +396,31 @@ static void showPendingTasks(Task tasks[], int total) {
     }
 
     if (pendingTasksShown == 0) {
-        printf("No pending tasks found.\n");
+        printf("There are no pending task.\n");
+    }
+}
+
+//Aquesta per les que estan en curs in progress
+void showInProgressTasks(Task tasks[], int total) {
+    int inProgressTasksShown = 0;
+
+    printf("\n--In Progress Tasks--\n");
+
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == IN_PROGRESS) {
+            printProductionTask(tasks[i]);
+            inProgressTasksShown++;
+        }
+    }
+
+    if (inProgressTasksShown == 0) {
+        printf("There is no task in progress.\n");
     }
 }
 
 
 
-// Mostra l'estat global de la produccio
+//Mostar la funcionalitat en general de les tasques
 void showProductionStatus(void) {
     Task tasks[MAX_TASKS];
     int total = 0;
@@ -412,4 +430,5 @@ void showProductionStatus(void) {
     printf("\n--Production Status--\n");
 
     showPendingTasks(tasks, total);
+    showInProgressTasks(tasks, total);
 }
