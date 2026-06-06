@@ -37,5 +37,6 @@ void updateTaskStatus(Task *t);
 void createToolAssemblyTask();
 int collectToolAssemblyTaskData(Task *t, Task tasks[], int total);
 void listTasks(void);
+void showProductionStatus();
 
 #endif
