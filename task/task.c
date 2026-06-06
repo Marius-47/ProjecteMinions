@@ -348,18 +348,6 @@ void listTasks(void) {
 
             printf("Duration: %d minutes\n", tasks[i].durationMinutes);
 
-            if (tasks[i].type == PART_CREATION) {
-                printf("Type: Part creation\n");
-            } else if (tasks[i].type == TOOL_ASSEMBLY) {
-                printf("Type: Tool assembly\n");
-            }
-
-            if (tasks[i].status == PENDING) {
-                printf("Status: Pending\n");
-            } else {
-                printf("Status: In progress\n");
-            }
-
             tasksShown++;
         }
     }
@@ -367,4 +355,97 @@ void listTasks(void) {
     if (tasksShown == 0) {
         printf("No pending or in progress tasks found.\n");
     }
+}
+
+// Mostra les dades d'una tasca dins de l'estat de produccio
+void printProductionTask(Task task) {
+    char *startTimeStr = dateTimeToString(task.startTime);
+
+    printf("\nAssigned to: %s (%s)\n",
+        task.assignedName,
+        task.assignedUsername);
+
+    printf("Description: %s\n", task.description);
+
+    if (startTimeStr == NULL) {
+        printf("Error converting start date.\n");
+    } else {
+        printf("Start date: %s\n", startTimeStr);
+        free(startTimeStr);
+    }
+
+    printf("Duration: %d minutes\n", task.durationMinutes);
+
+    if (task.type == PART_CREATION) {
+        printf("Type: Part creation\n");
+    } else if (task.type == TOOL_ASSEMBLY) {
+        printf("Type: Tool assembly\n");
+    }
+}
+
+//Funcio per tasques pendents
+static void showPendingTasks(Task tasks[], int total) {
+    int pendingTasksShown = 0;
+
+    printf("\n--Pending Tasks--\n");
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == PENDING) {
+            printProductionTask(tasks[i]);
+            pendingTasksShown++;
+        }
+    }
+
+    if (pendingTasksShown == 0) {
+        printf("There are no pending task.\n");
+    }
+}
+
+//Aquesta per les que estan en curs in progress
+void showInProgressTasks(Task tasks[], int total) {
+    int inProgressTasksShown = 0;
+
+    printf("\n--In Progress Tasks--\n");
+
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == IN_PROGRESS) {
+            printProductionTask(tasks[i]);
+            inProgressTasksShown++;
+        }
+    }
+
+    if (inProgressTasksShown == 0) {
+        printf("There is no task in progress.\n");
+    }
+}
+
+
+//Mostrem les tasques que ja estan completades, que es en aquest cas es mostra el contador de quantes ja s'han completat
+void showCompletedTasksTotal(Task tasks[], int total) {
+    int completedTasks = 0;
+
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == COMPLETED) {
+            completedTasks++;
+        }
+    }
+
+    if (completedTasks == 0) {
+        printf("\nNo completed tasks found.\n");
+    } else {
+        printf("\nCompleted tasks: %d\n", completedTasks);
+    }
+}
+
+//Mostar la funcionalitat en general de les tasques
+void showProductionStatus(void) {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+
+    loadTasks(tasks, &total);
+
+    printf("\n--Production Status--\n");
+
+    showPendingTasks(tasks, total);
+    showInProgressTasks(tasks, total);
+    showCompletedTasksTotal(tasks, total);
 }
