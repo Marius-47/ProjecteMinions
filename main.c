@@ -11,7 +11,8 @@ void showGruMenu(User u, int *loggedIn) {
     printf("2. List tasks\n");
     printf("3. Create part task\n");
     printf("4. Create tool assembly task\n");
-    printf("5. Log out\n");
+    printf("5. Check production status\n");
+    printf("6. Log out\n");
 
     printf("Choose an option: ");
     scanf(" %c", &option);
@@ -31,6 +32,9 @@ void showGruMenu(User u, int *loggedIn) {
             createToolAssemblyTask();
             break;
         case '5':
+            showProductionStatus();
+            break;
+        case '6':
             printf("Logging out...\n");
             *loggedIn = 0;
             break;

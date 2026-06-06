@@ -356,3 +356,60 @@ void listTasks(void) {
         printf("No pending or in progress tasks found.\n");
     }
 }
+
+// Mostra les dades d'una tasca dins de l'estat de produccio
+void printProductionTask(Task task) {
+    char *startTimeStr = dateTimeToString(task.startTime);
+
+    printf("\nAssigned to: %s (%s)\n",
+        task.assignedName,
+        task.assignedUsername);
+
+    printf("Description: %s\n", task.description);
+
+    if (startTimeStr == NULL) {
+        printf("Error converting start date.\n");
+    } else {
+        printf("Start date: %s\n", startTimeStr);
+        free(startTimeStr);
+    }
+
+    printf("Duration: %d minutes\n", task.durationMinutes);
+
+    if (task.type == PART_CREATION) {
+        printf("Type: Part creation\n");
+    } else if (task.type == TOOL_ASSEMBLY) {
+        printf("Type: Tool assembly\n");
+    }
+}
+
+// Mostra les tasques pendents
+static void showPendingTasks(Task tasks[], int total) {
+    int pendingTasksShown = 0;
+
+    printf("\n--Pending Tasks--\n");
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == PENDING) {
+            printProductionTask(tasks[i]);
+            pendingTasksShown++;
+        }
+    }
+
+    if (pendingTasksShown == 0) {
+        printf("No pending tasks found.\n");
+    }
+}
+
+
+
+// Mostra l'estat global de la produccio
+void showProductionStatus(void) {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+
+    loadTasks(tasks, &total);
+
+    printf("\n--Production Status--\n");
+
+    showPendingTasks(tasks, total);
+}
