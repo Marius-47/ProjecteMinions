@@ -419,6 +419,22 @@ void showInProgressTasks(Task tasks[], int total) {
 }
 
 
+//Mostrem les tasques que ja estan completades, que es en aquest cas es mostra el contador de quantes ja s'han completat
+void showCompletedTasksTotal(Task tasks[], int total) {
+    int completedTasks = 0;
+
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == COMPLETED) {
+            completedTasks++;
+        }
+    }
+
+    if (completedTasks == 0) {
+        printf("\nNo completed tasks found.\n");
+    } else {
+        printf("\nCompleted tasks: %d\n", completedTasks);
+    }
+}
 
 //Mostar la funcionalitat en general de les tasques
 void showProductionStatus(void) {
@@ -431,4 +447,5 @@ void showProductionStatus(void) {
 
     showPendingTasks(tasks, total);
     showInProgressTasks(tasks, total);
+    showCompletedTasksTotal(tasks, total);
 }
