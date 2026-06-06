@@ -429,7 +429,11 @@ void showCompletedTasksTotal(Task tasks[], int total) {
         }
     }
 
-    printf("\nCompleted tasks: %d\n", completedTasks);
+    if (completedTasks == 0) {
+        printf("\nNo completed tasks found.\n");
+    } else {
+        printf("\nCompleted tasks: %d\n", completedTasks);
+    }
 }
 
 //Mostar la funcionalitat en general de les tasques

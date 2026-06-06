@@ -259,7 +259,6 @@ int getFileSize(char* filename) {
 void clearInputBuffer() {
     int c;
 
-    while (c != '\n' ) {
-        c = getchar();
+    while ((c = getchar()) != '\n' && c != EOF) {
     }
 }
