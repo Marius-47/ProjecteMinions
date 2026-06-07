@@ -38,5 +38,8 @@ void createToolAssemblyTask();
 int collectToolAssemblyTaskData(Task *t, Task tasks[], int total);
 void listTasks(void);
 void showProductionStatus();
+int selectPendingTask(Task tasks[], int total);
+void reassignPendingTask(void);
+
 
 #endif

@@ -449,3 +449,61 @@ void showProductionStatus(void) {
     showInProgressTasks(tasks, total);
     showCompletedTasksTotal(tasks, total);
 }
+
+
+
+//Primer tenim la funció que mostra les tasques i les seves caracterisitques, i dsp que et deixa demanar quina tasca seleccionar
+//Tambe tenim l'altre funcio: reassign que ara mateix ens serveix que la selecció va be, a la seguent TT es tocara perque faci la funcio
+//correcta, i la pugui reassignar a un altre minion/superminion depenent del tipus de tasca
+int selectPendingTask(Task tasks[], int total) {
+    int pendingIndexes[MAX_TASKS];
+    int pendingCount = 0;
+    int choice;
+
+    printf("\n--Pending Tasks--\n");
+
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == PENDING) {
+            pendingIndexes[pendingCount] = i;
+            pendingCount++;
+
+            printf("\n%d. Task ID: %d", pendingCount, tasks[i].id);
+            printProductionTask(tasks[i]);
+        }
+    }
+
+    if (pendingCount == 0) {
+        printf("No pending tasks found.\n");
+        return -1;
+    }
+
+    printf("\nSelect task number: ");
+    scanf("%d", &choice);
+    clearInputBuffer();
+
+    if (choice < 1 || choice > pendingCount) {
+        printf("Invalid selection.\n");
+        return -1;
+    }
+
+    return pendingIndexes[choice - 1];
+}
+
+
+void reassignPendingTask(void) {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+    int selectedTaskIndex;
+
+    loadTasks(tasks, &total);
+    selectedTaskIndex = selectPendingTask(tasks, total);
+
+    if (selectedTaskIndex == -1) {
+        return;
+    }
+
+    printf("\nSelected task ID: %d\n", tasks[selectedTaskIndex].id);
+    printf("Assigned to: %s (%s)\n",
+        tasks[selectedTaskIndex].assignedName,
+        tasks[selectedTaskIndex].assignedUsername);
+}
