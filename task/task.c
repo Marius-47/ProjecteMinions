@@ -490,10 +490,82 @@ int selectPendingTask(Task tasks[], int total) {
 }
 
 
+//Tenim els usuaris del rol que s'ha seleccionat, pot ser o minion o superminion
+int selectUserByRole(User users[], int totalUsers, UserRole requiredRole) {
+    int userIndexes[MAX_USERS];
+    int userCount = 0;
+    int choice;
+
+    if (requiredRole == MINION) {
+        printf("\n--Available Minions--\n");
+    } else {
+        printf("\n--Available Superminions--\n");
+    }
+
+    for (int i = 0; i < totalUsers; i++) {
+        if (users[i].role == requiredRole) {
+            userIndexes[userCount] = i;
+            userCount++;
+
+            printf("%d. %s (%s)\n",
+                userCount,
+                users[i].name,
+                users[i].username);
+        }
+    }
+
+    if (userCount == 0) {
+        printf("No available users found.\n");
+        return -1;
+    }
+
+    printf("Select user number: ");
+    scanf("%d", &choice);
+    clearInputBuffer();
+
+    if (choice < 1 || choice > userCount) {
+        printf("Invalid selection.\n");
+        return -1;
+    }
+
+    return userIndexes[choice - 1];
+}
+
+//Es diferent a la que ja teniem per aixo tornem a fer una funcio de solapament, a mes que ignora la tasca que s'esta modificant
+//pq no hi hagin problmes
+int hasOverlapExcept(Task tasks[], int total, char* username,
+    DateTime start, int duration, int ignoredTaskIndex) {
+
+    int newStart = DateTimeInSeconds(start);
+    int newEnd = newStart + duration * 60;
+
+    for (int i = 0; i < total; i++) {
+        if (i != ignoredTaskIndex &&
+            strcmp(tasks[i].assignedUsername, username) == 0 &&
+            tasks[i].status != COMPLETED) {
+
+            int existingStart = DateTimeInSeconds(tasks[i].startTime);
+            int existingEnd = existingStart + tasks[i].durationMinutes * 60;
+
+            if (newStart < existingEnd && newEnd > existingStart) {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
 void reassignPendingTask(void) {
     Task tasks[MAX_TASKS];
+    User users[MAX_USERS];
+    UserRole requiredRole;
     int total = 0;
     int selectedTaskIndex;
+    int totalUsers = 0;
+    int selectedUserIndex;
+    
 
     loadTasks(tasks, &total);
     selectedTaskIndex = selectPendingTask(tasks, total);
@@ -502,8 +574,36 @@ void reassignPendingTask(void) {
         return;
     }
 
-    printf("\nSelected task ID: %d\n", tasks[selectedTaskIndex].id);
-    printf("Assigned to: %s (%s)\n",
-        tasks[selectedTaskIndex].assignedName,
-        tasks[selectedTaskIndex].assignedUsername);
+    loadUsers(users, &totalUsers);
+    if (tasks[selectedTaskIndex].type == PART_CREATION) {
+        requiredRole = MINION;
+    } else {
+        requiredRole = SUPERMINION;
+    }
+
+    selectedUserIndex = selectUserByRole(users, totalUsers, requiredRole);
+
+    if (selectedUserIndex == -1) {
+        return;
+    }
+
+
+    if (strcmp(tasks[selectedTaskIndex].assignedUsername,users[selectedUserIndex].username) == 0) {
+
+        printf("ERROR: This user is already assigned to the task.\n");
+        return;
+    }
+
+    if (hasOverlapExcept(tasks,total,users[selectedUserIndex].username,tasks[selectedTaskIndex].startTime,tasks[selectedTaskIndex].durationMinutes,selectedTaskIndex)) {
+        printf("ERROR: This user already has a task at that time.\n");
+        return;
+    }
+
+    strcpy(tasks[selectedTaskIndex].assignedUsername,users[selectedUserIndex].username);
+
+    strcpy(tasks[selectedTaskIndex].assignedName,users[selectedUserIndex].name);
+
+    saveTasks(tasks, total);
+
+    printf("Task reassigned successfully!\n");
 }
