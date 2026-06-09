@@ -229,3 +229,30 @@ void reassignPendingTask() {
 
     printf("Task reassigned successfully!\n");
 }
+
+
+//Carreguem i seleccionem la tasca, a partir d'aqui la eliminem i el q fem en el for es a partir de la tasca que s'ha eliminat
+//les seguents se li assigna un valor d'abans, per aixo el i sera valor i +1
+void cancelPendingTask() {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+    int selectedTaskIndex;
+
+    loadTasks(tasks, &total);
+
+    selectedTaskIndex = selectPendingTask(tasks, total);
+
+    if (selectedTaskIndex == -1) {
+        return;
+    }
+
+    for (int i = selectedTaskIndex; i < total - 1; i++) {
+        tasks[i] = tasks[i + 1];
+    }
+
+    total--;
+
+    saveTasks(tasks, total);
+
+    printf("Task cancelled successfully!\n");
+}
