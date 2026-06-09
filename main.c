@@ -3,6 +3,7 @@
 #include "utils/utils.h"
 #include "tool/tool.h"
 #include "task/task.h"
+#include "gru/gru.h"
 
 void showGruMenu(User u, int *loggedIn) {
     char option;
@@ -13,7 +14,8 @@ void showGruMenu(User u, int *loggedIn) {
     printf("4. Create tool assembly task\n");
     printf("5. Check production status\n");
     printf("6. Reassign pending task\n");
-    printf("7. Log out\n");
+    printf("7. Cancel pending task\n");
+    printf("8. Log out\n");
 
     printf("Choose an option: ");
     scanf(" %c", &option);
@@ -39,6 +41,9 @@ void showGruMenu(User u, int *loggedIn) {
             reassignPendingTask();
             break;
         case '7':
+            cancelPendingTask();
+            break;
+        case '8':
             printf("Logging out...\n");
             *loggedIn = 0;
             break;

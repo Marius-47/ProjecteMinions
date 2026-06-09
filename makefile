@@ -1,6 +1,6 @@
 all: minions
 
-obj/main.o: main.c user/user.h
+obj/main.o: main.c user/user.h gru/gru.h
 	gcc -g -c main.c -o obj/main.o
 
 obj/user.o: user/user.c user/user.h
@@ -15,8 +15,11 @@ obj/tool.o: tool/tool.c tool/tool.h
 obj/task.o: task/task.c task/task.h
 	gcc -g -c task/task.c -o obj/task.o
 
-minions: obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o
-	gcc -g obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o -o minions
+obj/gru.o: gru/gru.c gru/gru.h task/task.h user/user.h utils/utils.h
+	gcc -g -c gru/gru.c -o obj/gru.o
+
+minions: obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o obj/gru.o
+	gcc -g obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o obj/gru.o -o minions
 
 clean:
 	rm -f obj/*.o minions
