@@ -32,14 +32,12 @@ typedef struct {
 int loadTasks(Task tasks[], int *total);
 void saveTasks(Task tasks[], int total);
 int hasOverlap(Task tasks[], int total, char* username, DateTime start, int duration);
-void createPartTask(void);
+void createPartTask();
 void updateTaskStatus(Task *t);
 void createToolAssemblyTask();
 int collectToolAssemblyTaskData(Task *t, Task tasks[], int total);
-void listTasks(void);
-void showProductionStatus();
-int selectPendingTask(Task tasks[], int total);
-void reassignPendingTask(void);
+void listTasks();
+int hasOverlapExcept(Task tasks[], int total, char* username, DateTime start, int duration, int ignoredTaskIndex);
 
 
 #endif

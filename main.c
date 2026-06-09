@@ -3,6 +3,7 @@
 #include "utils/utils.h"
 #include "tool/tool.h"
 #include "task/task.h"
+#include "gru/gru.h"
 
 void showGruMenu(User u, int *loggedIn) {
     char option;
