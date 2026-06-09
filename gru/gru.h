@@ -3,5 +3,6 @@
 
 void showProductionStatus();
 void reassignPendingTask();
+void cancelPendingTask();
 
 #endif
