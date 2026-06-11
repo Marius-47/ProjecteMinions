@@ -17,7 +17,8 @@ void showGruMenu(User u, int *loggedIn) {
     printf("7. Cancel pending task\n");
     printf("8. Check minion performance\n");
     printf("9. Modify task planning\n");
-    printf("10. Log out\n");
+    printf("10. Generate production report\n");
+    printf("11. Log out\n");
 
     printf("Choose an option: ");
     scanf("%d", &option);
@@ -52,6 +53,9 @@ void showGruMenu(User u, int *loggedIn) {
             modifyTaskPlanning();
             break;
         case 10:
+            generateProductionReport();
+            break;
+        case 11:
             printf("Logging out...\n");
             *loggedIn = 0;
             break;
