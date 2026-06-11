@@ -304,6 +304,24 @@ int calculateMinionPerformance(MinionPerformance performance[]) {
 }
 
 
+//Fa la ordenacio de millor a menor rendiment
+void sortMinionPerformance(MinionPerformance performance[], int count) {
+    MinionPerformance aux;
+
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - 1 - i; j++) {
+            if (performance[j].completedTasks < performance[j + 1].completedTasks ||
+                (performance[j].completedTasks == performance[j + 1].completedTasks &&
+                 performance[j].totalMinutes > performance[j + 1].totalMinutes)) {
+
+                aux = performance[j];
+                performance[j] = performance[j + 1];
+                performance[j + 1] = aux;
+            }
+        }
+    }
+}
+
 //Afegim aquesta funcio per veure els resultats i veure que son correctes
 void showMinionPerformance() {
     MinionPerformance performance[MAX_USERS];
@@ -318,11 +336,10 @@ void showMinionPerformance() {
         return;
     }
 
-    for (int i = 0; i < performanceCount; i++) {
-        printf("\nName: %s (%s)\n",
-            performance[i].name,
-            performance[i].username);
+    sortMinionPerformance(performance, performanceCount);
 
+    for (int i = 0; i < performanceCount; i++) {
+        printf("\n%d. %s (%s)\n",i + 1, performance[i].name, performance[i].username);
         if (performance[i].role == MINION) {
             printf("Role: Minion\n");
         } else {
