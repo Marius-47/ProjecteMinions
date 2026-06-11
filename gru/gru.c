@@ -7,6 +7,14 @@
 #include "../user/user.h"
 #include "../utils/utils.h"
 
+typedef struct {
+    char name[100];
+    char username[50];
+    UserRole role;
+    int completedTasks;
+    int totalMinutes;
+} MinionPerformance;
+
 
 // Mostra les dades d'una tasca dins de l'estat de produccio
 void printProductionTask(Task task) {
@@ -255,4 +263,92 @@ void cancelPendingTask() {
     saveTasks(tasks, total);
 
     printf("Task cancelled successfully!\n");
+}
+
+// Calcula les tasques completades i el temps dedicat de cada minion i superminion
+int calculateMinionPerformance(MinionPerformance performance[]) {
+    User users[MAX_USERS];
+    Task tasks[MAX_TASKS];
+
+    int totalUsers = 0;
+    int totalTasks = 0;
+    int performanceCount = 0;
+
+    loadUsers(users, &totalUsers);
+    loadTasks(tasks, &totalTasks);
+
+    for (int i = 0; i < totalUsers; i++) {
+        if (users[i].role == MINION || users[i].role == SUPERMINION) {
+            strcpy(performance[performanceCount].name, users[i].name);
+            strcpy(performance[performanceCount].username, users[i].username);
+
+            performance[performanceCount].role = users[i].role;
+            performance[performanceCount].completedTasks = 0;
+            performance[performanceCount].totalMinutes = 0;
+
+            for (int j = 0; j < totalTasks; j++) {
+                if (tasks[j].status == COMPLETED &&
+                    strcmp(tasks[j].assignedUsername, users[i].username) == 0) {
+
+                    performance[performanceCount].completedTasks++;
+                    performance[performanceCount].totalMinutes +=
+                        tasks[j].durationMinutes;
+                }
+            }
+
+            performanceCount++;
+        }
+    }
+
+    return performanceCount;
+}
+
+
+//Fa la ordenacio de millor a menor rendiment
+void sortMinionPerformance(MinionPerformance performance[], int count) {
+    MinionPerformance aux;
+
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = 0; j < count - 1 - i; j++) {
+            if (performance[j].completedTasks < performance[j + 1].completedTasks ||
+                (performance[j].completedTasks == performance[j + 1].completedTasks &&
+                 performance[j].totalMinutes > performance[j + 1].totalMinutes)) {
+
+                aux = performance[j];
+                performance[j] = performance[j + 1];
+                performance[j + 1] = aux;
+            }
+        }
+    }
+}
+
+//Afegim aquesta funcio per veure els resultats i veure que son correctes
+void showMinionPerformance() {
+    MinionPerformance performance[MAX_USERS];
+    int performanceCount;
+
+    performanceCount = calculateMinionPerformance(performance);
+
+    printf("\n--Minion Performance--\n");
+
+    if (performanceCount == 0) {
+        printf("No minions or superminions found.\n");
+        return;
+    }
+
+    sortMinionPerformance(performance, performanceCount);
+
+    for (int i = 0; i < performanceCount; i++) {
+        printf("\n%d. %s (%s)\n",i + 1, performance[i].name, performance[i].username);
+        if (performance[i].role == MINION) {
+            printf("Role: Minion\n");
+        } else {
+            printf("Role: Superminion\n");
+        }
+
+        printf("Completed tasks: %d\n", performance[i].completedTasks);
+        printf("Time dedicated: %d hours and %d minutes\n",
+            performance[i].totalMinutes / 60,
+            performance[i].totalMinutes % 60);
+    }
 }

@@ -1,4 +1,4 @@
-8
+7
 ID: 1
 DESC: football practice
 USERNAME: bob
@@ -7,14 +7,6 @@ START: 2025-2-1 21:0
 DURATION: 90
 TYPE: 0
 STATUS: 2
-ID: 3
-DESC: study
-USERNAME: stuart
-NAME: Stuart
-START: 2026-10-2 21:0
-DURATION: 45
-TYPE: 1
-STATUS: 0
 ID: 4
 DESC: walk
 USERNAME: stuart
