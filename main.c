@@ -6,7 +6,7 @@
 #include "gru/gru.h"
 
 void showGruMenu(User u, int *loggedIn) {
-    char option;
+    int option;
 
     printf("\n1. List tools\n");
     printf("2. List tasks\n");
@@ -16,38 +16,42 @@ void showGruMenu(User u, int *loggedIn) {
     printf("6. Reassign pending task\n");
     printf("7. Cancel pending task\n");
     printf("8. Check minion performance\n");
-    printf("9. Log out\n");
+    printf("9. Modify task planning\n");
+    printf("10. Log out\n");
 
     printf("Choose an option: ");
-    scanf(" %c", &option);
+    scanf("%d", &option);
     clearInputBuffer();
 
     switch (option) {
-        case '1':
+        case 1:
             listTools();
             break;
-        case '2':
+        case 2:
             listTasks();
             break;
-        case '3':
+        case 3:
             createPartTask();
             break;
-        case '4':
+        case 4:
             createToolAssemblyTask();
             break;
-        case '5':
+        case 5:
             showProductionStatus();
             break;
-        case '6':
+        case 6:
             reassignPendingTask();
             break;
-        case '7':
+        case 7:
             cancelPendingTask();
             break;
-        case '8':
+        case 8:
             showMinionPerformance();
             break;
-        case '9':
+        case 9:
+            modifyTaskPlanning();
+            break;
+        case 10:
             printf("Logging out...\n");
             *loggedIn = 0;
             break;
@@ -58,23 +62,23 @@ void showGruMenu(User u, int *loggedIn) {
 }
 
 void showCommonMenu(User u, int *loggedIn) {
-    char option;
+    int option;
 
     printf("\n1. List tools\n");
     printf("2. List tasks\n");
     printf("3. Log out\n");
     printf("Choose an option: ");
-    scanf(" %c", &option);
+    scanf("%d", &option);
     clearInputBuffer();
 
     switch (option) {
-        case '1':
+        case 1:
             listTools();
             break;
-        case '2':
+        case 2:
             listTasks();
             break;
-        case '3':
+        case 3:
             printf("Logging out...\n");
             *loggedIn = 0;
             break;
@@ -106,7 +110,7 @@ void showMenu(User u) {
 }
 
 int main() {
-    char option;
+    int option;
 
     loadHardcodedUsers();
     loadHardcodedTools();
@@ -118,11 +122,11 @@ int main() {
         printf("\t3. Shut down!\n");
 
         printf("Choose an option: ");
-        scanf(" %c", &option);
+        scanf("%d", &option);
         clearInputBuffer();
 
         switch (option) {
-            case '1': {
+            case 1: {
                 User u = loginUser();
                 if (u.id == -2) {
                     u = loginWithPin(u.username);
@@ -134,10 +138,10 @@ int main() {
                 }
                 break;
             }
-            case '2':
+            case 2:
                 registerMinion();
                 break;
-            case '3':
+            case 3:
                 printf("Shutting down. Goodbye!\n");
                 break;
             default:
@@ -145,7 +149,7 @@ int main() {
                 break;
         }
 
-    } while (option != '3');
+    } while (option != 3);
 
     return 0;
 }

@@ -352,3 +352,91 @@ void showMinionPerformance() {
             performance[i].totalMinutes % 60);
     }
 }
+
+
+
+// Permet modificar la planificacio d'una tasca pendent
+void modifyTaskPlanning(void) {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+    int selectedTaskIndex;
+    int option;
+    int parsedValues;
+    int newDuration;
+    DateTime newStartTime;
+    char dateStr[20];
+
+    loadTasks(tasks, &total);
+
+    selectedTaskIndex = selectPendingTask(tasks, total);
+
+    if (selectedTaskIndex == -1) {
+        return;
+    }
+
+    //Aqui guardem els valors temporalment per quan haguem de modificar o comprovar no toquem la tasca original
+    newStartTime = tasks[selectedTaskIndex].startTime;
+    newDuration = tasks[selectedTaskIndex].durationMinutes;
+
+    printf("\n--Current planning--\n");
+    printf("Start date: %d-%d-%d %d:%d\n",
+        newStartTime.year,
+        newStartTime.month,
+        newStartTime.day,
+        newStartTime.hour,
+        newStartTime.minute);
+
+    printf("Duration: %d minutes\n", newDuration);
+
+    printf("\nWhat do you want to modify?\n");
+    printf("1. Start date\n");
+    printf("2. Duration\n");
+    printf("Choose an option: ");
+
+    scanf("%d", &option);
+    clearInputBuffer();
+
+    if (option == 1) {
+        printf("New start date (YYYY-MM-DD HH:MM): ");
+
+        fgets(dateStr, 20, stdin);
+        trimNewline(dateStr);
+
+        parsedValues = sscanf(dateStr, "%d-%d-%d %d:%d",
+            &newStartTime.year,
+            &newStartTime.month,
+            &newStartTime.day,
+            &newStartTime.hour,
+            &newStartTime.minute);
+
+        if (parsedValues != 5 || !validateDateTime(newStartTime)) {
+            printf("Error: Invalid date.\n");
+            return;
+        }
+
+    } else if (option == 2) {
+        printf("New duration (minutes): ");
+        scanf("%d", &newDuration);
+        clearInputBuffer();
+
+        if (newDuration <= 0) {
+            printf("Error: Duration must be greater than zero.\n");
+            return;
+        }
+
+    } else {
+        printf("Invalid option.\n");
+        return;
+    }
+
+    if (hasOverlapExcept(tasks,total,tasks[selectedTaskIndex].assignedUsername,newStartTime,newDuration,selectedTaskIndex)) {
+        printf("Error: This planning overlaps with another task.\n");
+        return;
+    }
+
+    tasks[selectedTaskIndex].startTime = newStartTime;
+    tasks[selectedTaskIndex].durationMinutes = newDuration;
+    updateTaskStatus(&tasks[selectedTaskIndex]);
+    saveTasks(tasks, total);
+    printf("Task planning modified successfully!\n");
+}
