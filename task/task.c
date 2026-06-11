@@ -109,6 +109,21 @@ int hasOverlap(Task tasks[], int total, char* username, DateTime start, int dura
     return 0;
 }
 
+
+//Amb aixo ja no es repeteix el ID existent, ens dona els ID i sabe, quin ha de ser el seguent
+int getNextTaskId(Task tasks[], int total) {
+    int maxId = 0;
+
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].id > maxId) {
+            maxId = tasks[i].id;
+        }
+    }
+
+    return maxId + 1;
+}
+
+
 //Creacio de tasca per parts per un minion
 void createPartTask() {
     Task tasks[MAX_TASKS];
@@ -194,7 +209,7 @@ void createPartTask() {
         return;
     }
 
-    t.id = total + 1;
+    t.id = getNextTaskId(tasks, total);
     t.type = PART_CREATION;
 
     updateTaskStatus(&t);
@@ -307,7 +322,7 @@ void createToolAssemblyTask() {
     }
 
     if (collectToolAssemblyTaskData(&t, tasks, total)) {
-        t.id = total + 1;
+        t.id = getNextTaskId(tasks, total);
         t.type = TOOL_ASSEMBLY;
 
         updateTaskStatus(&t);
