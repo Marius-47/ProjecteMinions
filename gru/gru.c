@@ -476,5 +476,12 @@ void generateProductionReport() {
 
     fclose(file);
 
+    int reportSize = getFileSize(PRODUCTION_REPORT_FILE);
+
+    if (reportSize <= 0) {
+        printf("Error: Production report is empty.\n");
+        return;
+    }
+
     printf("Production report generated successfully!\n");
 }
