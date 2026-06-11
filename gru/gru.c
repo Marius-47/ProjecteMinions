@@ -440,3 +440,41 @@ void modifyTaskPlanning(void) {
     saveTasks(tasks, total);
     printf("Task planning modified successfully!\n");
 }
+
+//Generem el fitxer de text amb lo necessari pel resum de produccio
+void generateProductionReport() {
+    Task tasks[MAX_TASKS];
+    int total = 0;
+    int createdParts = 0;
+    int assembledTools = 0;
+
+    FILE *file;
+
+    loadTasks(tasks, &total);
+
+    for (int i = 0; i < total; i++) {
+        if (tasks[i].status == COMPLETED) {
+            if (tasks[i].type == PART_CREATION) {
+                createdParts++;
+            } else if (tasks[i].type == TOOL_ASSEMBLY) {
+                assembledTools++;
+            }
+        }
+    }
+
+    file = fopen(PRODUCTION_REPORT_FILE, "w");
+
+    if (file == NULL) {
+        printf("Error opening production report file.\n");
+        return;
+    }
+
+    fprintf(file, "--Production Report--\n\n");
+    fprintf(file, "Created parts: %d\n", createdParts);
+    fprintf(file, "Assembled tools: %d\n", assembledTools);
+    fprintf(file, "Reported errors: 0\n");
+
+    fclose(file);
+
+    printf("Production report generated successfully!\n");
+}
