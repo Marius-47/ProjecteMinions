@@ -237,6 +237,9 @@ int registerMinion(void) {
 void modifyUserData(User *loggedUser) {
     int option;
     char newUsername[MAX_USERNAME];
+    int total = 0;
+    int userIndex = -1;
+    User users[MAX_USERS];
     
     printf("\n--Modify User Data--\n");
 
@@ -349,5 +352,23 @@ void modifyUserData(User *loggedUser) {
                 return;
         }
     }
-    printf("User data modified during the current session.\n");
+    
+    loadUsers(users, &total);
+
+    for (int i = 0; i < total; i++) {
+        if (users[i].id == loggedUser->id) {
+            userIndex = i;
+            break;
+        }
+    }
+
+    if (userIndex == -1) {
+        printf("Error: User not found.\n");
+        return;
+    }
+
+    users[userIndex] = *loggedUser;
+    saveUsers(users, total);
+    printf("User data modified successfully!\n");
+    
 }
