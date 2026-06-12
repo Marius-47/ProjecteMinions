@@ -102,6 +102,24 @@ int usernameExists(char* username) {
     return 0;
 }
 
+
+//Utilitzem una altre funcio perque aquesta el que va es ignorar al usuari que esta conectat
+int usernameExistsExcept(char* username, int currentUserId) {
+    User users[MAX_USERS];
+    int total = 0;
+
+    loadUsers(users, &total);
+
+    for (int i = 0; i < total; i++) {
+        if (users[i].id != currentUserId &&
+            strcmp(users[i].username, username) == 0) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 //El que fa es validar les credencials de l'usuari
 User loginUser(void) {
     char username[MAX_USERNAME];
@@ -217,6 +235,9 @@ int registerMinion(void) {
 
 //Les opcions que es poden modificar segons el rol
 void modifyUserData(User *loggedUser) {
+    int option;
+    char newUsername[MAX_USERNAME];
+    
     printf("\n--Modify User Data--\n");
 
     if (loggedUser->role == GRU) {
@@ -225,6 +246,51 @@ void modifyUserData(User *loggedUser) {
         printf("3. Change PIN\n");
         printf("4. Change favorite fruit\n");
         printf("5. Go back\n");
+
+        printf("Choose an option: ");
+        scanf("%d", &option);
+        clearInputBuffer();
+
+        switch (option) {
+            case 1:
+                printf("New username: ");
+                fgets(newUsername, MAX_USERNAME, stdin);
+                trimNewline(newUsername);
+
+                if (usernameExistsExcept(newUsername, loggedUser->id)) {
+                    printf("Error: This username already exists.\n");
+                    return;
+                }
+
+                strcpy(loggedUser->username, newUsername);
+                break;
+
+            case 2:
+                printf("New password: ");
+                fgets(loggedUser->password, MAX_PASSWORD, stdin);
+                trimNewline(loggedUser->password);
+                break;
+
+            case 3:
+                printf("New PIN: ");
+                fgets(loggedUser->pin, MAX_PIN, stdin);
+                trimNewline(loggedUser->pin);
+                break;
+
+            case 4:
+                printf("New favorite fruit: ");
+                fgets(loggedUser->favFruit, MAX_FRUIT, stdin);
+                trimNewline(loggedUser->favFruit);
+                break;
+
+            case 5:
+                return;
+
+            default:
+                printf("Invalid option.\n");
+                return;
+        }
+
     } else {
         printf("1. Change name\n");
         printf("2. Change username\n");
@@ -232,5 +298,56 @@ void modifyUserData(User *loggedUser) {
         printf("4. Change PIN\n");
         printf("5. Change favorite fruit\n");
         printf("6. Go back\n");
+
+        printf("Choose an option: ");
+        scanf("%d", &option);
+        clearInputBuffer();
+
+        switch (option) {
+            case 1:
+                printf("New name: ");
+                fgets(loggedUser->name, MAX_NAME, stdin);
+                trimNewline(loggedUser->name);
+                break;
+
+            case 2:
+                printf("New username: ");
+                fgets(newUsername, MAX_USERNAME, stdin);
+                trimNewline(newUsername);
+
+                if (usernameExistsExcept(newUsername, loggedUser->id)) {
+                    printf("Error: This username already exists.\n");
+                    return;
+                }
+
+                strcpy(loggedUser->username, newUsername);
+                break;
+
+            case 3:
+                printf("New password: ");
+                fgets(loggedUser->password, MAX_PASSWORD, stdin);
+                trimNewline(loggedUser->password);
+                break;
+
+            case 4:
+                printf("New PIN: ");
+                fgets(loggedUser->pin, MAX_PIN, stdin);
+                trimNewline(loggedUser->pin);
+                break;
+
+            case 5:
+                printf("New favorite fruit: ");
+                fgets(loggedUser->favFruit, MAX_FRUIT, stdin);
+                trimNewline(loggedUser->favFruit);
+                break;
+
+            case 6:
+                return;
+
+            default:
+                printf("Invalid option.\n");
+                return;
+        }
     }
+    printf("User data modified during the current session.\n");
 }
