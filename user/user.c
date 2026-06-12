@@ -213,3 +213,24 @@ int registerMinion(void) {
     printf("Minion added successfully!\n");
     return 1;
 }
+
+
+//Les opcions que es poden modificar segons el rol
+void modifyUserData(User *loggedUser) {
+    printf("\n--Modify User Data--\n");
+
+    if (loggedUser->role == GRU) {
+        printf("1. Change username\n");
+        printf("2. Change password\n");
+        printf("3. Change PIN\n");
+        printf("4. Change favorite fruit\n");
+        printf("5. Go back\n");
+    } else {
+        printf("1. Change name\n");
+        printf("2. Change username\n");
+        printf("3. Change password\n");
+        printf("4. Change PIN\n");
+        printf("5. Change favorite fruit\n");
+        printf("6. Go back\n");
+    }
+}
