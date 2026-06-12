@@ -485,3 +485,99 @@ void generateProductionReport() {
 
     printf("Production report generated successfully!\n");
 }
+
+
+//Mostrem els minions basics
+int selectBasicMinion(User users[], int totalUsers) {
+    int minionIndexes[MAX_USERS];
+    int minionCount = 0;
+    int choice;
+
+    printf("\n--Available Basic Minions--\n");
+
+    for (int i = 0; i < totalUsers; i++) {
+        if (users[i].role == MINION) {
+            minionIndexes[minionCount] = i;
+            minionCount++;
+
+            printf("%d. %s (%s)\n",
+                minionCount,
+                users[i].name,
+                users[i].username);
+        }
+    }
+
+    if (minionCount == 0) {
+        printf("No basic minions available.\n");
+        return -1;
+    }
+
+    printf("Select minion number: ");
+    scanf("%d", &choice);
+    clearInputBuffer();
+
+    if (choice < 1 || choice > minionCount) {
+        printf("Invalid selection.\n");
+        return -1;
+    }
+
+    return minionIndexes[choice - 1];
+}
+
+//FIncio que permet seleccionar el nou rol que es vol per aquell minion
+UserRole selectEvolutionRole(void) {
+    int choice;
+
+    printf("\n--Evolution Options--\n");
+    printf("1. Superminion\n");
+    printf("2. Minion Engineer\n");
+    printf("Choose an option: ");
+    scanf("%d", &choice);
+    clearInputBuffer();
+
+    if (choice == 1) {
+        return SUPERMINION;
+    }
+
+    if (choice == 2) {
+        return MINION_ENGINEER;
+    }
+
+    printf("Invalid selection.\n");
+    return MINION;
+}
+
+
+
+//Selecciones el minion basic i esculls la seva evolucio, pero encara no canviem el rol. Aixo ho fem en un altre TT perque
+//tambe hem de validar si queda minim un a la base
+void evolveMinion(void) {
+    User users[MAX_USERS];
+    int totalUsers = 0;
+    int selectedMinionIndex;
+    UserRole newRole;
+
+    loadUsers(users, &totalUsers);
+
+    selectedMinionIndex = selectBasicMinion(users, totalUsers);
+
+    if (selectedMinionIndex == -1) {
+        return;
+    }
+
+    newRole = selectEvolutionRole();
+
+    if (newRole == MINION) {
+        return;
+    }
+
+    printf("\nSelected minion: %s (%s)\n",
+        users[selectedMinionIndex].name,
+        users[selectedMinionIndex].username);
+
+    if (newRole == SUPERMINION) {
+        printf("Selected evolution: Superminion\n");
+    } else {
+        printf("Selected evolution: Minion Engineer\n");
+    }
+}

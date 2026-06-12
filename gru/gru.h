@@ -9,5 +9,6 @@ void cancelPendingTask();
 void showMinionPerformance();
 void modifyTaskPlanning();
 void generateProductionReport();
+void evolveMinion();
 
 #endif
