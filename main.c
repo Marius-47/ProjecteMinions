@@ -5,7 +5,7 @@
 #include "task/task.h"
 #include "gru/gru.h"
 
-void showGruMenu(User u, int *loggedIn) {
+void showGruMenu(User *u, int *loggedIn) {
     int option;
 
     printf("\n1. List tools\n");
@@ -19,7 +19,8 @@ void showGruMenu(User u, int *loggedIn) {
     printf("9. Modify task planning\n");
     printf("10. Generate production report\n");
     printf("11. Evolve minion\n");
-    printf("12. Log out\n");
+    printf("12. Modify user data\n");
+    printf("13. Log out\n");
 
     printf("Choose an option: ");
     scanf("%d", &option);
@@ -60,6 +61,9 @@ void showGruMenu(User u, int *loggedIn) {
             evolveMinion();
             break;
         case 12:
+            modifyUserData(u);
+            break;
+        case 13:
             printf("Logging out...\n");
             *loggedIn = 0;
             break;
@@ -69,12 +73,13 @@ void showGruMenu(User u, int *loggedIn) {
     }
 }
 
-void showCommonMenu(User u, int *loggedIn) {
+void showCommonMenu(User *u, int *loggedIn) {
     int option;
 
     printf("\n1. List tools\n");
     printf("2. List tasks\n");
-    printf("3. Log out\n");
+    printf("3. Modify user data\n");
+    printf("4. Log out\n");
     printf("Choose an option: ");
     scanf("%d", &option);
     clearInputBuffer();
@@ -87,6 +92,9 @@ void showCommonMenu(User u, int *loggedIn) {
             listTasks();
             break;
         case 3:
+            modifyUserData(u);
+            break;
+        case 4:
             printf("Logging out...\n");
             *loggedIn = 0;
             break;
@@ -110,9 +118,9 @@ void showMenu(User u) {
         printf(")\n");
 
         if (u.role == GRU) {
-            showGruMenu(u, &loggedIn);
+            showGruMenu(&u, &loggedIn);
         } else {
-            showCommonMenu(u, &loggedIn);
+            showCommonMenu(&u, &loggedIn);
         }
     }
 }
