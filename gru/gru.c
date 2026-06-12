@@ -548,6 +548,19 @@ UserRole selectEvolutionRole(void) {
 }
 
 
+//Funcio per comptar quants minions queden restants
+int countBasicMinions(User users[], int totalUsers) {
+    int minionCount = 0;
+
+    for (int i = 0; i < totalUsers; i++) {
+        if (users[i].role == MINION) {
+            minionCount++;
+        }
+    }
+
+    return minionCount;
+}
+
 
 //Selecciones el minion basic i esculls la seva evolucio, pero encara no canviem el rol. Aixo ho fem en un altre TT perque
 //tambe hem de validar si queda minim un a la base
@@ -555,9 +568,17 @@ void evolveMinion(void) {
     User users[MAX_USERS];
     int totalUsers = 0;
     int selectedMinionIndex;
+    int basicMinionCount = 0;
     UserRole newRole;
 
     loadUsers(users, &totalUsers);
+
+    basicMinionCount = countBasicMinions(users, totalUsers);
+
+    if (basicMinionCount <= 1) {
+        printf("ERROR: At least one basic minion must remain available.\n");
+        return;
+    }
 
     selectedMinionIndex = selectBasicMinion(users, totalUsers);
 
@@ -571,13 +592,9 @@ void evolveMinion(void) {
         return;
     }
 
-    printf("\nSelected minion: %s (%s)\n",
-        users[selectedMinionIndex].name,
-        users[selectedMinionIndex].username);
+    users[selectedMinionIndex].role = newRole;
 
-    if (newRole == SUPERMINION) {
-        printf("Selected evolution: Superminion\n");
-    } else {
-        printf("Selected evolution: Minion Engineer\n");
-    }
+    saveUsers(users, totalUsers);
+
+    printf("Minion evolved successfully!\n");
 }

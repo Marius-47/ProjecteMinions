@@ -1,4 +1,4 @@
-4
+5
 ID: 1
 NAME: Gru
 USERNAME: gru
@@ -26,4 +26,11 @@ USERNAME: puyi
 PASSWORD: puyi123
 PIN: 9090
 FRUIT: mango
-ROLE: 1
+ROLE: 2
+ID: 5
+NAME: Mike
+USERNAME: mike
+PASSWORD: mike123
+PIN: 8990
+FRUIT: poma
+ROLE: 3
