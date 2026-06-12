@@ -223,7 +223,7 @@ int textfileExists(char* filename) {
  * Returns: 1 if the file exists, 0 otherwise
 *************************************************/
 int binFileExists(char* filename) {
-    FILE* file = fopen(filename, "r");
+    FILE* file = fopen(filename, "rb");
 
     if (file) {
         fclose(file);
