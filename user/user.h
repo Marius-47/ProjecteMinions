@@ -36,5 +36,6 @@ User loginUser(void);
 User loginWithPin(char* username);
 int registerMinion(void);
 void modifyUserData(User *loggedUser);
+int usernameExistsExcept(char* username, int currentUserId);
 
 #endif
