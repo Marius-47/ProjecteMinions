@@ -172,7 +172,7 @@ int validateDateTime(DateTime dt) {
     for (int i = 0; i < len; i++) {
         if (email[i] == '@') {
             atIndex = i;
-            return 1;
+            break;
         }
     }
     if (atIndex == -1) {
