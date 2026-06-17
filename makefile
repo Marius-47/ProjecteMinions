@@ -21,5 +21,9 @@ obj/gru.o: gru/gru.c gru/gru.h task/task.h user/user.h utils/utils.h
 minions: obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o obj/gru.o
 	gcc -g obj/main.o obj/user.o obj/tool.o obj/task.o obj/utils.o obj/gru.o -o minions
 
+test: obj/user.o obj/utils.o obj/tool.o obj/task.o obj/gru.o
+	gcc -g tdd/test.c obj/user.o obj/utils.o obj/tool.o obj/task.o obj/gru.o -o obj/test_runner
+	./obj/test_runner
+
 clean:
-	rm -f obj/*.o minions
+	rm -f obj/*.o minions obj/test_runner
