@@ -24,7 +24,6 @@ Compila i executa els tests TDD, en concret tdd/test.c, que agrupa els tres test
 
 Per a poder provar el programa des d'un inici hi ha tres usuaris hardcoded al codi (un de cada rol bàsic que demana l'enunciat: Gru, Minion i Superminion). A més dins del fitxer data/users.txt que s'entrega ja queda guardat un quart usuari, Puyi que té el rol de Superminion, afegit manualment durant les proves, per facilitar comprovar funcionalitats com l'evolució de minions sense haver-lo de registrar de nou.
 
-Aquests usuaris hardcoded es troben dins de la carpeta data en el fitxer exactament users: data/users.txt
 
 # Modular
 
