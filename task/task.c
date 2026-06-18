@@ -6,8 +6,6 @@
 #include "../utils/utils.h"
 
 //Per saber l'estat de la tasca tenim aquesta funcio auxiliar que anirem cridant a loadTasks
-// Per saber l'estat de la tasca tenim aquesta funcio auxiliar
-// que anirem cridant a loadTasks
 void updateTaskStatus(Task *t) {
     DateTime now = getCurrentDateTime();
 
