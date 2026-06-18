@@ -1,0 +1,5 @@
+--Production Report--
+
+Created parts: 4
+Assembled tools: 3
+Reported errors: 0
