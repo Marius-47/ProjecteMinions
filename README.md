@@ -28,3 +28,9 @@ Per a poder provar el programa des d'un inici hi ha tres usuaris hardcoded al co
 # Modular
 
 Tal com es demanava en l'enunciat, el projecte s'ha fet modularment i ha seguit segons les funcionalitats generals i especifiques diferents carpetes i estructures perquè estigui ben implementat.
+
+
+# Crèdits
+
+Aquest projecte va ser desenvolupat com a pràctica acadèmica per a l'assignatura de Projectes de Programació a La Salle - Universitat Ramon Llull. 
+Els fitxers utils/utils.h i utils/utils.c van ser proporcionats per la universitat com a punt de partida amb diverses funcions, amb errors introduïts intencionadament com a exercici de debugging. La resta del projecte va ser dissenyat i implementat per mi.
